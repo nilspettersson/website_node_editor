@@ -7,7 +7,7 @@
 
 #container{
     width: 100%;
-    height: 96.9vh;
+    height: 96vh;
     background: rgb(255, 255, 255);
 }
 
@@ -59,3 +59,47 @@ iframe {
     padding: 1em;
     background: #1f1f1f;
 }
+
+
+
+.node{ 
+    display: inline-block;
+    background: #2c2c2c;
+    border: 0.064em solid #ffffff00;
+    border-radius: 10px;
+    min-width: 12em;
+    position: absolute;
+    
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.node:hover{
+    border: 0.064em solid #ffffff3a;
+}
+
+.node .header{
+    color: white;
+    padding: 0.5em 1em;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+
+.node-output{
+    background: #228a91;
+}
+.node-div{
+    background: #226491;
+}
+.node-text{
+    background: #389122;
+}
+.node-header{
+    background: #917322;
+}
+
