@@ -1,0 +1,50 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#container{
+    width: 100%;
+    height: 96.9vh;
+    background: rgb(255, 255, 255);
+}
+
+.panel{
+    outline: 1px solid rgba(0, 0, 0, 0.137);
+}
+
+#editor{
+    background: #1f1f1f;
+    overflow: hidden;
+    position: relative;
+}
+
+.menu{
+    background: rgb(65, 65, 65);
+    padding: 4px 10px;
+}
+.menu-item{
+    color: white;
+    padding: 4px 10px;
+    text-decoration: none;
+}
+
+
+
+iframe {
+    outline: none;
+    border: none;
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.code-viewer{
+    overflow: auto;
+    color: white;
+    padding: 1em;
+    background: #1f1f1f;
+}
