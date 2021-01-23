@@ -83,6 +83,7 @@ iframe {
 }
 
 .node .header{
+    cursor: grab;
     color: white;
     padding: 0.5em 1em;
     border-top-left-radius: 10px;

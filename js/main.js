@@ -137,3 +137,28 @@ function setHorizontal(){
     container.classList.replace("panel-vertical", "panel-horizontal");
     initPanels();
 }
+
+
+//gets the children with class
+function getChildNodes(parent, className){
+    var children = [];
+    for (var i = 0; i < parent.childNodes.length; i++) {
+        if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
+            if (parent.childNodes[i].className.includes(className)) {
+                children.push(parent.childNodes[i]);
+            }  
+        }      
+    }
+    return children;
+}
+
+//gets all children
+function getChildNodes(parent){
+    var children = [];
+    for (var i = 0; i < parent.childNodes.length; i++) {
+        if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
+            children.push(parent.childNodes[i]);
+        }      
+    }
+    return children;
+}
