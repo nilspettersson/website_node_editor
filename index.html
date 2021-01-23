@@ -10,26 +10,31 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="main.css">
+
         <script src="https://nilspettersson.github.io/js_libraries/resizeable_panels/js/resizeable_panels.js"></script>
+        <script src="js/main.js"></script>
+
     </head>
     <body>
 
         <div class="menu">
-            <a class="menu-item" href="#">Add</a>
+            <input class="menu-item" type="button" value="Add">
+            <input class="menu-item" type="button" value="Vertical" onclick="setVertical()">
+            <input class="menu-item" type="button" value="Horizontal" onclick="setHorizontal()">
         </div>
         
         <div id="container" class="panel panel-horizontal">
-            <div class="panel" id="editor">
+            <div class="panel panel-vertical">
+                <div class="panel" id="editor">
                     <canvas id="canvas" width="2920" height=2080></canvas>
-                
-            </div>
-            <div class="panel panel-horizontal">
+                </div>
                 <div class="panel">
                     <iframe id='viewer'></iframe>
                 </div>
-                <div class="panel code-viewer">
-                    <p id="code">ssdsd</p>
-                </div>
+            </div>
+            
+            <div class="panel code-viewer" data-panel-width="20">
+                <p id="code">some text</p>
             </div>
         </div>
 
