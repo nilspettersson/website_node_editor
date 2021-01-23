@@ -3,6 +3,7 @@ let nodeCount = 0;
 
 window.addEventListener('load', (event) => {
     let node = new NodeText(60, 60);
+    let node2 = new NodeText(280, 60);
 });
 
 class NodeBase{
@@ -33,6 +34,10 @@ class NodeBase{
         headerText.innerHTML = type;
         header.append(headerText);
 
+        let content = document.createElement("div");
+        content.id = "content" + this.id;
+        content.classList.add("content");
+
 
         let output = document.createElement("div");
         output.classList.add("output");
@@ -40,20 +45,19 @@ class NodeBase{
         output.onmouseup = function(e){outputMouseUp(this, nodeId)}
 
         node.append(header);
-
+        node.append(content);
         node.append(output);
 
         document.getElementById("editor").append(node);
     }
 
     addComponent(component){
-
+        document.getElementById("content" + this.id).append(component);
     }
 
-    createTextarea(){
+    textarea(){
         let text = document.createElement("textarea");
         text.classList.add("node-textarea");
-        text.id = id;
         text.spellcheck = false;
         return text;
     }
@@ -62,7 +66,7 @@ class NodeBase{
 class NodeText extends NodeBase{
     constructor(x, y){
         super(x, y, "text");
-
+        this.addComponent(this.textarea());
     }
 }
 
