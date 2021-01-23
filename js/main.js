@@ -1,11 +1,20 @@
 /*Global node variables*/
 let nodeCount = 0;
 
+let output;
+
 window.addEventListener('load', (event) => {
     let nodes = []
     nodes.push(new NodeText(60, 60));
     nodes.push(new NodeText(280, 60));
+
+    nodes[0].getHtml();
+    output = nodes[0];
 });
+
+document.onkeyup = function(e){
+    output.getHtml();
+}
 
 document.onmousemove = function(e){
     if(NodeBase.mouseDown && NodeBase.currentNode != null){
@@ -49,6 +58,22 @@ class NodeBase{
         nodeCount++;
     }
 
+    getHtml(){
+        let children = getChildNodes(document.getElementById("content" + this.id));
+
+        let html = "";
+        for(let i = 0; i < children.length; i++){
+            let tagType = children[i].getAttribute("data-tagType");
+
+            html += "&lt;" + tagType + "&gt" + children[i].value + "&lt;/" + tagType + "&gt"
+
+            //html = html.replaceAll("\n", "<br>");
+    
+            let code = document.getElementById("code");
+            code.innerHTML = html;
+        }
+        
+    }
 
     initElement(x, y, type){
         let nodeId = this.id;
@@ -107,9 +132,10 @@ class NodeBase{
         document.getElementById("content" + this.id).append(component);
     }
 
-    textarea(){
+    textarea(tagType){
         let text = document.createElement("textarea");
         text.classList.add("node-textarea");
+        text.setAttribute("data-tagType", tagType);
         text.spellcheck = false;
         return text;
     }
@@ -118,7 +144,7 @@ class NodeBase{
 class NodeText extends NodeBase{
     constructor(x, y){
         super(x, y, "text");
-        this.addComponent(this.textarea());
+        this.addComponent(this.textarea("p"));
     }
 }
 
@@ -146,8 +172,8 @@ function getChildNodes(parent, className){
         if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
             if (parent.childNodes[i].className.includes(className)) {
                 children.push(parent.childNodes[i]);
-            }  
-        }      
+            }
+        }
     }
     return children;
 }
@@ -158,7 +184,7 @@ function getChildNodes(parent){
     for (var i = 0; i < parent.childNodes.length; i++) {
         if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
             children.push(parent.childNodes[i]);
-        }      
+        }
     }
     return children;
 }
