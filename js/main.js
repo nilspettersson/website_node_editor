@@ -5,11 +5,16 @@ let output;
 
 window.addEventListener('load', (event) => {
     let nodes = []
-    nodes.push(new NodeText(60, 60));
-    nodes.push(new NodeText(280, 60));
-
-    nodes[0].getHtml();
+    nodes.push(new NodeOutput(60, 60));
     output = nodes[0];
+
+    let div = new NodeDiv(280, 60);
+    div.nodes.push(new NodeText(60, 160));
+
+    output.nodes.push(div);
+
+    
+    output.getHtml();
 });
 
 document.onkeyup = function(e){
@@ -49,6 +54,7 @@ class NodeBase{
 
     constructor(x, y, type){
         this.id = nodeCount;
+        this.type = type;
         this.nodes = [];
 
         this.selected = false;
@@ -62,16 +68,26 @@ class NodeBase{
         let children = getChildNodes(document.getElementById("content" + this.id));
 
         let html = "";
+
+        if(this.type == "div"){
+            html += "&lt;div&gt";
+            
+            for(let i = 0; i < this.nodes.length; i++){
+                html += this.nodes[i].getHtml();
+            }
+
+            html += "&lt;/div&gt";
+        }
+
         for(let i = 0; i < children.length; i++){
             let tagType = children[i].getAttribute("data-tagType");
 
-            html += "&lt;" + tagType + "&gt" + children[i].value + "&lt;/" + tagType + "&gt"
+            html += "&lt;" + tagType + "&gt" + children[i].value + "&lt;/" + tagType + "&gt";
 
             //html = html.replaceAll("\n", "<br>");
-    
-            let code = document.getElementById("code");
-            code.innerHTML = html;
         }
+
+        return html;
         
     }
 
@@ -146,6 +162,36 @@ class NodeText extends NodeBase{
         super(x, y, "text");
         this.addComponent(this.textarea("p"));
     }
+}
+
+class NodeDiv extends NodeBase{
+    constructor(x, y){
+        super(x, y, "div");
+    }
+}
+
+class NodeOutput extends NodeBase{
+    constructor(x, y){
+        super(x, y, "output");
+    }
+
+    getHtml(){
+        let children = getChildNodes(document.getElementById("content" + this.id));
+
+        let html = "";
+
+            
+        for(let i = 0; i < this.nodes.length; i++){
+            html += this.nodes[i].getHtml();
+        }
+
+
+
+        let code = document.getElementById("code");
+        code.innerHTML = html;
+        
+    }
+    
 }
 
 
