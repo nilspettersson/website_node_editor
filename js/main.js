@@ -1,5 +1,6 @@
 /*Global node variables*/
 let nodeCount = 0;
+let editorDrag = false;
 
 let output;
 
@@ -15,6 +16,20 @@ window.addEventListener('load', (event) => {
 
     
     output.getHtml();
+
+
+    document.getElementById("editor").onmousedown = function(e){
+        if(NodeBase.mouseDown == false){
+            NodeBase.lastMouseX = e.x;
+            NodeBase.lastMouseY = e.y;
+            editorDrag = true;
+        }
+    }
+
+    document.getElementById("editor").onmouseup = function(e){
+            editorDrag = false;
+    }
+
 });
 
 document.onkeyup = function(e){
@@ -40,6 +55,31 @@ document.onmousemove = function(e){
 
         node.style.left = (x + NodeBase.offsetX) + "px";
         node.style.top = (y + NodeBase.offsetY - editorOffset) + "px";
+    }
+    else if(editorDrag){
+        let nodes = document.getElementsByClassName("node");
+
+        let x = e.pageX;
+        let y = e.pageY;
+        
+        for(let i = 0; i < nodes.length; i++){
+            
+
+            //removes the px to get the location of the node
+            let nodeX = nodes[i].style.left.replace("px", "");
+            let nodeY = nodes[i].style.top.replace("px", "");
+
+            let newX = parseInt(nodeX) + (x - NodeBase.lastMouseX);
+            let newY = parseInt(nodeY) + (y - NodeBase.lastMouseY);
+
+
+            nodes[i].style.left = (newX) + "px";
+            nodes[i].style.top = (newY) + "px";
+        }
+        NodeBase.lastMouseX = x;
+        NodeBase.lastMouseY = y;
+
+        //drawLines();
     }
 }
 
