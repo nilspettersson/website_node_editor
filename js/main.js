@@ -105,7 +105,9 @@ class NodeBase{
     }
 
     getHtml(){
-        let children = getChildNodes(document.getElementById("content" + this.id));
+        //we get all components with class: render.
+        let parent = document.getElementById("content" + this.id);
+        let children = getChildNodesByClassName(parent, "render");
 
         let html = "";
         if(this.type == "div"){
@@ -181,7 +183,10 @@ class NodeBase{
         document.getElementById("editor").append(node);
     }
 
-    addComponent(component){
+    addComponent(component, render){
+        if(render == true){
+            component.classList.add("render");
+        }
         document.getElementById("content" + this.id).append(component);
     }
 
@@ -203,7 +208,7 @@ class NodeBase{
         input.append(dot);
 
         let nodeId = this.id;
-        dot.onmousedown = function(e){inputMouseDown(this, nodeId, index)}
+        //dot.onmousedown = function(e){inputMouseDown(this, nodeId, index)}
 
         return input;
     }
@@ -212,13 +217,14 @@ class NodeBase{
 class NodeText extends NodeBase{
     constructor(x, y){
         super(x, y, "text");
-        this.addComponent(this.textarea("p"));
+        this.addComponent(this.textarea("p"), true);
     }
 }
 
 class NodeDiv extends NodeBase{
     constructor(x, y){
         super(x, y, "div");
+        this.addComponent(this.input(0), false);
     }
 }
 
@@ -228,7 +234,7 @@ class NodeOutput extends NodeBase{
     }
 
     getHtml(){
-        let children = getChildNodes(document.getElementById("content" + this.id));
+        let children = getChildNodes(document.getElementById("content" + this.id), "render");
 
         let html = "";
 
@@ -264,7 +270,7 @@ function setHorizontal(){
 
 
 //gets the children with class
-function getChildNodes(parent, className){
+function getChildNodesByClassName(parent, className){
     var children = [];
     for (var i = 0; i < parent.childNodes.length; i++) {
         if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
