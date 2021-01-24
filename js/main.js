@@ -108,14 +108,11 @@ class NodeBase{
         let children = getChildNodes(document.getElementById("content" + this.id));
 
         let html = "";
-
         if(this.type == "div"){
             html += "&lt;div&gt";
-            
             for(let i = 0; i < this.nodes.length; i++){
                 html += this.nodes[i].getHtml();
             }
-
             html += "&lt;/div&gt";
         }
 
@@ -194,6 +191,21 @@ class NodeBase{
         text.setAttribute("data-tagType", tagType);
         text.spellcheck = false;
         return text;
+    }
+
+    input(index){
+        let input = document.createElement("div");
+        input.classList.add("input");
+        input.classList.add("input" + this.id);
+    
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        input.append(dot);
+
+        let nodeId = this.id;
+        dot.onmousedown = function(e){inputMouseDown(this, nodeId, index)}
+
+        return input;
     }
 }
 
