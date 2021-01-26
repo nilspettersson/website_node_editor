@@ -3,9 +3,14 @@ let nodeCount = 0;
 let editorDrag = false;
 
 let output;
+let nodes;
+
+let editorCanvas;
 
 window.addEventListener('load', (event) => {
-    let nodes = []
+    editorCanvas = new EditorCanvas();
+
+    nodes = [];
     nodes.push(new NodeOutput(60, 60));
     output = nodes[0];
 
@@ -14,13 +19,10 @@ window.addEventListener('load', (event) => {
 
     output.nodes.push(div);
 
-    
     output.getHtml();
 
-    let editorCanvas = new EditorCanvas();
-
-    editorCanvas.drawLine(0,0,400,400);
-
+    drawLines();
+    
 
     document.getElementById("editor").onmousedown = function(e){
         if(NodeBase.mouseDown == false){
@@ -83,7 +85,15 @@ document.onmousemove = function(e){
         NodeBase.lastMouseX = x;
         NodeBase.lastMouseY = y;
 
-        //drawLines();
+    }
+    drawLines();
+}
+
+function drawLines(){
+    editorCanvas.clear();
+
+    for(let i = 0; i < nodes.length; i++){
+        nodes[i].drawLines();
     }
 }
 
@@ -95,7 +105,7 @@ class EditorCanvas{
     }
 
     clear(){
-        g.clearRect(0, 0, canvas.width, canvas.height);
+        this.g.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     drawLine(x1, y1, x2, y2){
@@ -155,29 +165,28 @@ class NodeBase{
     }
 
     //draws lines between parent and child nodes.
-    /*drawLines(){
+    drawLines(){
         for(let i = 0; i < this.nodes.length; i++){
             let node = document.getElementsByClassName("input" + this.id)[i];
-            //console.log(node.getBoundingClientRect());
 
-            let startX = node.getBoundingClientRect().x - 4;
-            let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2 - 4;
+            let startX = node.getBoundingClientRect().x;
+            let startY = node.getBoundingClientRect().y - node.getBoundingClientRect().height / 2 - 12;
 
             let childNode = document.getElementById("node" + this.nodes[i].id);
-            //console.log(childNode.getBoundingClientRect());
-            let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width - 4;
-            let endY = childNode.getBoundingClientRect().y + 16;
+            let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width;
+            let endY = childNode.getBoundingClientRect().y - 18;
 
 
-            g.strokeStyle = "gray";
+            editorCanvas.drawLine(startX, startY, endX, endY);
+            /*g.strokeStyle = "gray";
             g.beginPath();
             g.moveTo(startX, startY);
             g.lineTo(endX, endY);
-            g.stroke();
+            g.stroke();*/
 
             this.nodes[i].drawLines();
         }
-    }*/
+    }
 
     initElement(x, y, type){
         let nodeId = this.id;
