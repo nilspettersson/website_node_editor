@@ -17,6 +17,10 @@ window.addEventListener('load', (event) => {
     
     output.getHtml();
 
+    let editorCanvas = new EditorCanvas();
+
+    editorCanvas.drawLine(0,0,400,400);
+
 
     document.getElementById("editor").onmousedown = function(e){
         if(NodeBase.mouseDown == false){
@@ -83,6 +87,26 @@ document.onmousemove = function(e){
     }
 }
 
+//used to draw lines between nodes.
+class EditorCanvas{
+    constructor(){
+        this.canvas = document.getElementById("canvas");
+        this.g = canvas.getContext("2d");
+    }
+
+    clear(){
+        g.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    drawLine(x1, y1, x2, y2){
+        this.g.strokeStyle = "gray";
+        this.g.beginPath();
+        this.g.moveTo(x1, y1);
+        this.g.lineTo(x2, y2);
+        this.g.stroke();
+    }
+}
+
 class NodeBase{
     static mouseDown = false;
     static lastMouseX = 0;
@@ -129,6 +153,31 @@ class NodeBase{
         return html;
         
     }
+
+    //draws lines between parent and child nodes.
+    /*drawLines(){
+        for(let i = 0; i < this.nodes.length; i++){
+            let node = document.getElementsByClassName("input" + this.id)[i];
+            //console.log(node.getBoundingClientRect());
+
+            let startX = node.getBoundingClientRect().x - 4;
+            let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2 - 4;
+
+            let childNode = document.getElementById("node" + this.nodes[i].id);
+            //console.log(childNode.getBoundingClientRect());
+            let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width - 4;
+            let endY = childNode.getBoundingClientRect().y + 16;
+
+
+            g.strokeStyle = "gray";
+            g.beginPath();
+            g.moveTo(startX, startY);
+            g.lineTo(endX, endY);
+            g.stroke();
+
+            this.nodes[i].drawLines();
+        }
+    }*/
 
     initElement(x, y, type){
         let nodeId = this.id;
@@ -178,7 +227,9 @@ class NodeBase{
 
         node.append(header);
         node.append(content);
-        node.append(output);
+        if(this.type != "output"){
+            node.append(output);
+        }       
 
         document.getElementById("editor").append(node);
     }
@@ -231,6 +282,7 @@ class NodeDiv extends NodeBase{
 class NodeOutput extends NodeBase{
     constructor(x, y){
         super(x, y, "output");
+        this.addComponent(this.input(0), false);
     }
 
     getHtml(){
