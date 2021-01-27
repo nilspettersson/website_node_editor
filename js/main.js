@@ -178,17 +178,17 @@ class NodeBase{
 
         let html = "";
         if(this.type == "div"){
-            html += "&lt;div&gt";
+            html += "<div>";
             for(let i = 0; i < this.nodes.length; i++){
                 html += this.nodes[i].getHtml();
             }
-            html += "&lt;/div&gt";
+            html += "</div>";
         }
 
         for(let i = 0; i < children.length; i++){
             let tagType = children[i].getAttribute("data-tagType");
 
-            html += "&lt;" + tagType + "&gt" + children[i].value + "&lt;/" + tagType + "&gt";
+            html += "<" + tagType + ">" + children[i].value + "</" + tagType + ">";
 
             //html = html.replaceAll("\n", "<br>");
         }
@@ -330,13 +330,23 @@ class NodeOutput extends NodeBase{
         let children = getChildNodes(document.getElementById("content" + this.id), "render");
 
         let html = "";
-
-            
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
         }
 
 
+        let website = '<!DOCTYPE html> \n' +
+        '<html lang="en"> \n'+
+        '<head> \n &emsp; <title>website</title> \n &emsp; <style></style> \n </head> \n'+
+        '<body> \n' + html + '\n </body>'+
+        '\n </html>';
+        let viewer = document.getElementById("viewer");
+        viewer.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(website);
+
+
+        html = html.replaceAll("<", "&lt;");
+        html = html.replaceAll(">", "&gt;");
+        html = html.replaceAll("\n", "<br>");
 
         let code = document.getElementById("code");
         code.innerHTML = html;
@@ -344,8 +354,6 @@ class NodeOutput extends NodeBase{
     }
     
 }
-
-
 
 
 //switch from vertical or horizontal view
