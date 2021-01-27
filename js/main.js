@@ -51,7 +51,7 @@ document.onmousemove = function(e){
     if(NodeBase.connectParent != null){
         let node = document.getElementById("node" + NodeBase.connectParent.id);
         let input = node.getElementsByClassName("node-input")[NodeBase.connectParent.nodes.length];
-        
+
         let startX = input.getBoundingClientRect().x;
         let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2;
 
@@ -352,12 +352,20 @@ class NodeOutput extends NodeBase{
 function setVertical(){
     let container = document.getElementById("container");
     container.classList.replace("panel-horizontal", "panel-vertical");
+
+    let view = document.getElementById("view");
+    view.classList.replace("panel-vertical", "panel-horizontal");
+
     initPanels();
 }
 
 function setHorizontal(){
     let container = document.getElementById("container");
     container.classList.replace("panel-vertical", "panel-horizontal");
+
+    let view = document.getElementById("view");
+    view.classList.replace("panel-horizontal", "panel-vertical");
+
     initPanels();
 }
 
