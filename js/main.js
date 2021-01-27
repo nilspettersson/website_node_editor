@@ -35,6 +35,9 @@ window.addEventListener('load', (event) => {
 
     document.getElementById("editor").onmouseup = function(e){
             editorDrag = false;
+            NodeBase.connectParent = null;
+            drawLines();
+            output.getHtml();
     }
 
 });
@@ -56,6 +59,7 @@ document.onmousemove = function(e){
         editorCanvas.drawLine(startX, startY, e.x, e.y);
 
     }
+    //drag selected node.
     else if(NodeBase.mouseDown && NodeBase.currentNode != null){
         let editorOffset = document.getElementById("editor").getBoundingClientRect().y;
 
@@ -77,6 +81,7 @@ document.onmousemove = function(e){
 
         drawLines();
     }
+    //drag editor.
     else if(editorDrag){
         let nodes = document.getElementsByClassName("node");
 
@@ -253,7 +258,11 @@ class NodeBase{
         let output = document.createElement("div");
         output.classList.add("output");
         
-        output.onmouseup = function(e){outputMouseUp(this, nodeId)}
+        output.onmouseup = (e) =>{
+            if(NodeBase.connectParent != null){
+                NodeBase.connectParent.addChild(this);
+            }
+        }
 
         node.append(header);
         node.append(content);
