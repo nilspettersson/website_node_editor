@@ -50,14 +50,14 @@ document.onmousemove = function(e){
     //if mouse down on input node reate line from input to mouse position.
     if(NodeBase.connectParent != null){
         let node = document.getElementById("node" + NodeBase.connectParent.id);
-
-        let startX = node.getBoundingClientRect().x;
-        let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2 + 18;
+        let input = node.getElementsByClassName("node-input")[NodeBase.connectParent.nodes.length];
+        
+        let startX = input.getBoundingClientRect().x;
+        let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2;
 
         drawLines();
 
         editorCanvas.drawLine(startX, startY, e.x, e.y);
-
     }
     //drag selected node.
     else if(NodeBase.mouseDown && NodeBase.currentNode != null){
