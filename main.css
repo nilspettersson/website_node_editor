@@ -125,12 +125,12 @@ iframe {
 }
 
 
-.input{
+.node-input{
     position: relative;
     height: 1.6em;
 }
 
-.input .dot{
+.node-input .dot{
     overflow: visible;
     position: absolute;
     left: -0.3em;

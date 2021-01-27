@@ -11,13 +11,13 @@ window.addEventListener('load', (event) => {
     editorCanvas = new EditorCanvas();
 
     nodes = [];
-    nodes.push(new NodeOutput(60, 60));
+    nodes.push(new NodeOutput(500, 60));
     output = nodes[0];
 
-    let div = new NodeDiv(280, 60);
-    div.nodes.push(new NodeText(60, 160));
+    let div = new NodeDiv(260, 60);
+    div.addChild(new NodeText(30, 80));
 
-    output.nodes.push(div);
+    output.addChild(div);
 
     output.getHtml();
 
@@ -138,6 +138,12 @@ class NodeBase{
         nodeCount++;
     }
 
+    //add child will add child node and add a input for the next child node.
+    addChild(node){
+        this.addComponent(this.input(nodes.length));
+        this.nodes.push(node);
+    }
+
     getHtml(){
         //we get all components with class: render.
         let parent = document.getElementById("content" + this.id);
@@ -175,14 +181,7 @@ class NodeBase{
             let childNode = document.getElementById("node" + this.nodes[i].id);
             let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width;
             let endY = childNode.getBoundingClientRect().y - 18;
-
-
             editorCanvas.drawLine(startX, startY, endX, endY);
-            /*g.strokeStyle = "gray";
-            g.beginPath();
-            g.moveTo(startX, startY);
-            g.lineTo(endX, endY);
-            g.stroke();*/
 
             this.nodes[i].drawLines();
         }
@@ -260,7 +259,7 @@ class NodeBase{
 
     input(index){
         let input = document.createElement("div");
-        input.classList.add("input");
+        input.classList.add("node-input");
         input.classList.add("input" + this.id);
     
         let dot = document.createElement("div");
