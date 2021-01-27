@@ -14,10 +14,11 @@ window.addEventListener('load', (event) => {
     nodes.push(new NodeOutput(500, 60));
     output = nodes[0];
 
-    let div = new NodeDiv(260, 60);
+    nodes.push(new NodeDiv(260, 60));
+    nodes.push(new NodeText(30, 80));
+    /*let div = new NodeDiv(260, 60);
     div.addChild(new NodeText(30, 80));
-
-    output.addChild(div);
+    output.addChild(div);*/
 
     output.getHtml();
 
@@ -43,7 +44,19 @@ document.onkeyup = function(e){
 }
 
 document.onmousemove = function(e){
-    if(NodeBase.mouseDown && NodeBase.currentNode != null){
+    //if mouse down on input node reate line from input to mouse position.
+    if(NodeBase.connectParent != null){
+        let node = document.getElementById("node" + NodeBase.connectParent.id);
+
+        let startX = node.getBoundingClientRect().x;
+        let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2 + 18;
+
+        drawLines();
+
+        editorCanvas.drawLine(startX, startY, e.x, e.y);
+
+    }
+    else if(NodeBase.mouseDown && NodeBase.currentNode != null){
         let editorOffset = document.getElementById("editor").getBoundingClientRect().y;
 
         let node = document.getElementById("node" + NodeBase.currentNode.id);
@@ -61,6 +74,8 @@ document.onmousemove = function(e){
 
         node.style.left = (x + NodeBase.offsetX) + "px";
         node.style.top = (y + NodeBase.offsetY - editorOffset) + "px";
+
+        drawLines();
     }
     else if(editorDrag){
         let nodes = document.getElementsByClassName("node");
@@ -85,8 +100,9 @@ document.onmousemove = function(e){
         NodeBase.lastMouseX = x;
         NodeBase.lastMouseY = y;
 
+        drawLines();
     }
-    drawLines();
+
 }
 
 function drawLines(){
@@ -128,6 +144,9 @@ class NodeBase{
     static offsetY = 0;
     static dragSetup = false;
     static currentNode = null;
+
+    static connectParent = null;
+    
 
     constructor(x, y, type){
         this.id = nodeCount;
@@ -270,7 +289,9 @@ class NodeBase{
         input.append(dot);
 
         let nodeId = this.id;
-        //dot.onmousedown = function(e){inputMouseDown(this, nodeId, index)}
+        dot.onmousedown = (e) =>{
+            NodeBase.connectParent = this;
+        }
 
         return input;
     }
