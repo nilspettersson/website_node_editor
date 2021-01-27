@@ -109,10 +109,13 @@ class EditorCanvas{
     }
 
     drawLine(x1, y1, x2, y2){
+        let editor = document.getElementById("editor");
+        let editorBox = editor.getBoundingClientRect();
+
         this.g.strokeStyle = "gray";
         this.g.beginPath();
-        this.g.moveTo(x1, y1);
-        this.g.lineTo(x2, y2);
+        this.g.moveTo(x1, y1 - editorBox.y);
+        this.g.lineTo(x2, y2 - editorBox.y);
         this.g.stroke();
     }
 }
@@ -176,11 +179,11 @@ class NodeBase{
             let node = document.getElementsByClassName("input" + this.id)[i];
 
             let startX = node.getBoundingClientRect().x;
-            let startY = node.getBoundingClientRect().y - node.getBoundingClientRect().height / 2 - 12;
+            let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2;
 
             let childNode = document.getElementById("node" + this.nodes[i].id);
             let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width;
-            let endY = childNode.getBoundingClientRect().y - 18;
+            let endY = childNode.getBoundingClientRect().y + 20;
             editorCanvas.drawLine(startX, startY, endX, endY);
 
             this.nodes[i].drawLines();
