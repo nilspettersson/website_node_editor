@@ -222,14 +222,26 @@ class NodeBase{
         node.style.left = x + "px";
         node.style.top = y + "px";
         node.classList.add("node");
-        /*node.onmousedown = function(e){mouseDown(this)}
-        node.onmouseup = function(e){mouseUp(this, nodeId)}*/
+        node.onmousedown = (e) => {
+            //if input node is selected do not move node.
+            if(NodeBase.connectParent != null){
+                return;
+            }
+            NodeBase.lastMouseX = e.x;
+            NodeBase.lastMouseY = e.y;
+            NodeBase.mouseDown = true;
+            NodeBase.dragSetup = true;
+            NodeBase.currentNode = this;
+        }
+        node.onmouseup = (e) => {
+            NodeBase.mouseDown = false;
+        }
 
         let header = document.createElement("div");
         header.id = "header" + this.id;
         header.classList.add("header");
         header.classList.add("node-" + type);
-        header.onmousedown = (e) => {
+        /*header.onmousedown = (e) => {
             NodeBase.lastMouseX = e.x;
             NodeBase.lastMouseY = e.y;
             NodeBase.mouseDown = true;
@@ -238,7 +250,7 @@ class NodeBase{
         }
         header.onmouseup = (e) => {
             NodeBase.mouseDown = false;
-        }
+        }*/
         /*header.onmousedown = function(e){
             console.log(this);
         }
