@@ -11,11 +11,8 @@ window.addEventListener('load', (event) => {
     editorCanvas = new EditorCanvas();
 
     nodes = [];
-    nodes.push(new NodeOutput(500, 60));
+    nodes.push(new NodeOutput(400, 120));
     output = nodes[0];
-
-    nodes.push(new NodeDiv(260, 60));
-    nodes.push(new NodeText(30, 80));
     /*let div = new NodeDiv(260, 60);
     div.addChild(new NodeText(30, 80));
     output.addChild(div);*/
@@ -31,6 +28,7 @@ window.addEventListener('load', (event) => {
             NodeBase.lastMouseY = e.y;
             editorDrag = true;
         }
+        document.getElementById("add-content").classList.remove("dropdown-content-click");
     }
 
     document.getElementById("editor").onmouseup = function(e){
@@ -412,4 +410,26 @@ function getChildNodes(parent){
         }
     }
     return children;
+}
+
+function addDropdownClick(e){
+    document.getElementById("add-content").classList.toggle("dropdown-content-click");
+}
+
+function addNewNode(type){
+    let node = null;
+    if(type == "div"){
+        node = new NodeDiv(0, 0);
+    }
+    else if(type == "text"){
+        node = new NodeText(0, 0);
+    }
+    NodeBase.lastMouseX = 0;
+    NodeBase.lastMouseY = 0;
+    NodeBase.mouseDown = true;
+    NodeBase.dragSetup = true;
+    NodeBase.currentNode = node;
+    nodes.push(node);
+
+    document.getElementById("add-content").classList.remove("dropdown-content-click");
 }
