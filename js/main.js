@@ -298,6 +298,24 @@ class NodeBase{
 
         return input;
     }
+
+    dropdown(items){
+        let dropdown = document.createElement("select");
+        dropdown.classList.add("node-dropdown");
+
+        for(let i = 0; i < items.length; i++){
+            let item = document.createElement("option");
+            if(i == 0){
+                item.selected = true;
+            }
+            item.classList.add("dropdown-item");
+            item.value = items[i];
+            item.innerHTML = items[i];
+            dropdown.append(item);
+        }
+        return dropdown;
+    }
+
 }
 
 class NodeText extends NodeBase{
@@ -310,6 +328,7 @@ class NodeText extends NodeBase{
 class NodeHeader extends NodeBase{
     constructor(x, y){
         super(x, y, "header");
+        this.addComponent(this.dropdown(Array("h1", "h2")));
         this.addComponent(this.textarea("h1"), true);
     }
 }

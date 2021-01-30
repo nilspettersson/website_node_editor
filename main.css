@@ -116,7 +116,7 @@ iframe {
 }
 
 .node:hover{
-    border: 0.064em solid #ffffff3a;
+    border: 0.064em solid #ffffff21;
 }
 
 .node .header{
@@ -189,13 +189,27 @@ iframe {
     width: 90%;
     outline: none;
 }
-
 .node-textarea:hover{
     outline: none;
     border: 0.064em solid rgba(0, 0, 0, 0);
 }
-
 .node-textarea:focus{
     border: 0.064em solid #1873bee0;
     box-shadow: 0em 0em 0.2em #1873be8c;
+}
+
+.node-dropdown{
+    margin: 0.5rem 0rem;
+    background: rgb(41, 41, 41);
+    color:white;
+    border: 0.064em solid rgba(0, 0, 0, 0);
+    border-radius: 0.14rem;
+    padding: 0.1em 0.4rem;
+    width: 90%;
+    outline: none;
+}
+
+.node-dropdown:hover{
+    background: rgb(46, 46, 46);
+    border: 0.064em solid rgba(255, 255, 255, 0.144);
 }
