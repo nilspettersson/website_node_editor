@@ -170,7 +170,13 @@ iframe {
     background: rgb(56, 145, 34);
 }
 .node-header{
-    background: rgb(145, 115, 34);
+    background: rgb(56, 145, 34);
+}
+.node-button{
+    background: rgb(145, 60, 34);
+}
+.node-script{
+    background: rgb(172, 152, 38);
 }
 
 

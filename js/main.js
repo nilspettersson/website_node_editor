@@ -461,7 +461,7 @@ class NodeHeader extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "header");
         this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")), "render-none");
-        this.addComponent(this.textarea("h1"), "render");
+        this.addComponent(this.textarea("h1"), "render-none");
     }
 }
 
