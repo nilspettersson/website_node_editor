@@ -297,7 +297,7 @@ class NodeBase{
             output = document.createElement("div");
             output.classList.add("output-script");
             output.onmouseup = (e) =>{
-                if(NodeBase.connectParent != null){
+                if(NodeBase.connectParent != null && NodeBase.connectType == "input-script"){
                     if(this.parent == null){
                         let index = nodes.indexOf(this);
                         nodes.splice(index, 1);
@@ -310,7 +310,7 @@ class NodeBase{
             output = document.createElement("div");
             output.classList.add("output");
             output.onmouseup = (e) =>{
-                if(NodeBase.connectParent != null){
+                if(NodeBase.connectParent != null && NodeBase.connectType == "input"){
                     if(this.parent == null){
                         let index = nodes.indexOf(this);
                         nodes.splice(index, 1);
