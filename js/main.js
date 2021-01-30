@@ -2,7 +2,6 @@
 let nodeCount = 0;
 let editorDrag = false;
 
-let output;
 let nodes;
 
 let editorCanvas;
@@ -12,12 +11,8 @@ window.addEventListener('load', (event) => {
 
     nodes = [];
     nodes.push(new NodeOutput(400, 120));
-    output = nodes[0];
-    /*let div = new NodeDiv(260, 60);
-    div.addChild(new NodeText(30, 80));
-    output.addChild(div);*/
 
-    output.getHtml();
+    nodes[0].getHtml();
 
     drawLines();
     
@@ -35,17 +30,38 @@ window.addEventListener('load', (event) => {
             editorDrag = false;
             NodeBase.connectParent = null;
             drawLines();
-            output.getHtml();
+            nodes[0].getHtml();
     }
 
+    document.onkeydown = function(e){
+        if(e.key == "x"){
+            console.log(nodes);
+            let id = NodeBase.currentNode.id;
+            document.getElementById("node" + id).remove();
+            let index = nodes.indexOf(NodeBase.currentNode);
+            if(index == -1){
+                for(let i = 0; i < nodes.length; i++){
+                    nodes[i].removeSelectedNode();
+                }
+            }
+            else{
+                nodes.splice(index, 1);
+            }
+        }
+
+        drawLines();
+        nodes[0].getHtml();
+    }
 });
 
+
+
 document.onkeyup = function(e){
-    output.getHtml();
+    nodes[0].getHtml();
 }
 
 document.onmousemove = function(e){
-    //if mouse down on input node reate line from input to mouse position.
+    //if mouse down on input node create line from input to mouse position.
     if(NodeBase.connectParent != null){
         let node = document.getElementById("node" + NodeBase.connectParent.id);
         let input = node.getElementsByClassName("node-input")[NodeBase.connectParent.nodes.length];
@@ -151,13 +167,11 @@ class NodeBase{
     static connectParent = null;
     
 
-    constructor(x, y, type){
+    constructor(x, y, parent, type){
         this.id = nodeCount;
         this.type = type;
+        this.parent = parent;
         this.nodes = [];
-
-        this.selected = false;
-
         this.initElement(x, y, type);
 
         nodeCount++;
@@ -165,8 +179,26 @@ class NodeBase{
 
     //add child will add child node and add a input for the next child node.
     addChild(node){
+        node.parent = this;
         this.addComponent(this.input(nodes.length));
         this.nodes.push(node);
+    }
+
+    removeSelectedNode(){
+        //console.log(this.nodes);
+        let id = NodeBase.currentNode.id;
+        let index = this.nodes.indexOf(NodeBase.currentNode);
+        if(index == -1){
+            for(let i = 0; i < this.nodes.length; i++){
+                if(this.nodes[i].removeSelectedNode()){
+                    return true;
+                }
+            }
+        }
+        else{
+            this.nodes.splice(index, 1);
+            return true;
+        }
     }
 
     getHtml(){
@@ -236,6 +268,10 @@ class NodeBase{
             NodeBase.mouseDown = false;
         }
 
+        node.onclick = (e) => {
+            NodeBase.currentNode = this;
+        }
+
         let header = document.createElement("div");
         header.id = "header" + this.id;
         header.classList.add("header");
@@ -255,6 +291,16 @@ class NodeBase{
         
         output.onmouseup = (e) =>{
             if(NodeBase.connectParent != null){
+                if(this.parent != null){
+                    let index = this.parent.indexOf(this);
+                    this.parent.splice(index, 1);
+                }
+                else{
+                    let index = nodes.indexOf(this);
+                    nodes.splice(index, 1);
+                }
+                console.log(nodes);
+
                 NodeBase.connectParent.addChild(this);
             }
         }
@@ -325,37 +371,37 @@ class NodeBase{
 }
 
 class NodeText extends NodeBase{
-    constructor(x, y){
-        super(x, y, "text");
+    constructor(x, y, parent){
+        super(x, y, parent, "text");
         this.addComponent(this.textarea("p"), true);
     }
 }
 
 class NodeHeader extends NodeBase{
-    constructor(x, y){
-        super(x, y, "header");
-        this.addComponent(this.dropdownTagSelector(Array("h1", "h2")));
+    constructor(x, y, parent){
+        super(x, y, parent, "header");
+        this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")));
         this.addComponent(this.textarea("h1"), true);
     }
 }
 
 class NodeDiv extends NodeBase{
-    constructor(x, y){
-        super(x, y, "div");
+    constructor(x, y, parent){
+        super(x, y, parent, "div");
         this.addComponent(this.input(0), false);
     }
 }
 
 class NodeButton extends NodeBase{
-    constructor(x, y){
-        super(x, y, "button");
+    constructor(x, y, parent){
+        super(x, y, parent, "button");
         this.addComponent(this.textarea("button"), true);
     }
 }
 
 class NodeOutput extends NodeBase{
-    constructor(x, y){
-        super(x, y, "output");
+    constructor(x, y, parent){
+        super(x, y, parent, "output");
         this.addComponent(this.input(0), false);
     }
 
