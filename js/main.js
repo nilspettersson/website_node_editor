@@ -4,6 +4,8 @@ let editorDrag = false;
 
 let nodes;
 
+let script = "";
+
 let editorCanvas;
 
 window.addEventListener('load', (event) => {
@@ -191,7 +193,7 @@ class NodeBase{
     addChild(node){
         if(node.type == "script"){
             node.parent = this;
-            this.addComponent(this.inputScript(nodes.length));
+            this.addComponent(this.inputScript(), "event");
             this.nodes.push(node);
         }
         else{
@@ -203,10 +205,6 @@ class NodeBase{
     }
 
     getHtml(){
-        //we get all components with class: render.
-        let parent = document.getElementById("content" + this.id);
-        let children = getChildNodesByClassName(parent, "render");
-
         let html = "";
         if(this.type == "div"){
             html += "<div>";
@@ -216,15 +214,47 @@ class NodeBase{
             html += "</div>";
         }
 
-        //get tag type fom data-tagType.
+        //all node script children. add functions.
+        for(let i = 0; i < this.nodes.length; i++){
+            if(this.nodes[i].type == "script"){
+                script += "function event" + this.id + i + "(event){";
+                this.nodes[i].getHtml();
+                script += "}";
+            }
+        }
+
+        let parent = document.getElementById("content" + this.id);
+
+        //add event attribute. gets all input components with type event to add event atributes to node.
+        let atributes = "";
+        let scriptEvents = getChildNodesByClassName(parent, "event");
+        for(let i = 0; i < scriptEvents.length; i++){
+            let atribute = scriptEvents[i].getElementsByTagName("select")[0].value;
+            atributes += ' ' + atribute + '="event' + this.id + i + '(this)"';
+            
+        }
+        
+        //we get all components with class: render.
+        let children = getChildNodesByClassName(parent, "render");
         for(let i = 0; i < children.length; i++){
+            //get tag type fom data-tagType.
             let tagType = children[i].getAttribute("data-tagType");
 
-            html += "<" + tagType + ">" + children[i].value + "</" + tagType + ">";
-
+            html += "<" + tagType + " " + atributes + ">" + children[i].value + "</" + tagType + ">";
             //html = html.replaceAll("\n", "<br>");
         }
 
+
+
+
+        //add script. adds the script content from the child script nodes
+        let scripts = getChildNodesByClassName(parent, "render-script");
+        for(let i = 0; i < scripts.length; i++){
+            script += scripts[i].value;
+            //console.log(scripts[i].value);
+        }
+        
+        
         return html;
     }
 
@@ -329,10 +359,8 @@ class NodeBase{
         document.getElementById("editor").append(node);
     }
 
-    addComponent(component, render){
-        if(render == true){
-            component.classList.add("render");
-        }
+    addComponent(component, type){
+        component.classList.add(type);
         document.getElementById("content" + this.id).append(component);
     }
 
@@ -362,7 +390,7 @@ class NodeBase{
         return input;
     }
 
-    inputScript(index){
+    inputScript(){
         let input = document.createElement("div");
         input.classList.add("node-input-script");
         input.classList.add("input-script" + this.id);
@@ -384,11 +412,6 @@ class NodeBase{
     dropdown(items){
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
-
-        //set the data-tagtype of nexr component.
-        /*dropdown.onchange = (e) => {
-            dropdown.nextSibling.setAttribute("data-tagType", dropdown.value);
-        }*/
 
         for(let i = 0; i < items.length; i++){
             let item = document.createElement("option");
@@ -430,49 +453,51 @@ class NodeBase{
 class NodeText extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "text");
-        this.addComponent(this.textarea("p"), true);
+        this.addComponent(this.textarea("p"), "render");
     }
 }
 
 class NodeHeader extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "header");
-        this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")));
-        this.addComponent(this.textarea("h1"), true);
+        this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")), "render-none");
+        this.addComponent(this.textarea("h1"), "render");
     }
 }
 
 class NodeDiv extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "div");
-        this.addComponent(this.input(0), false);
+        this.addComponent(this.input(0), "render");
     }
 }
 
 class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
-        this.addComponent(this.textarea("button"), true);
-        this.addComponent(this.inputScript(0));
+        this.addComponent(this.textarea("button"), "render");
+        this.addComponent(this.inputScript(), "event");
     }
 }
 
 class NodeScript extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "script");
+        this.addComponent(this.textarea("script"), "render-script");
     }
 }
 
 class NodeOutput extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "output");
-        this.addComponent(this.input(0), false);
+        this.addComponent(this.input(0), "render-none");
     }
 
     getHtml(){
-        let children = getChildNodes(document.getElementById("content" + this.id), "render");
+        //let children = getChildNodes(document.getElementById("content" + this.id), "render");
 
         let html = "";
+        script = "";
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
         }
@@ -481,7 +506,7 @@ class NodeOutput extends NodeBase{
         let website = '<!DOCTYPE html> \n' +
         '<html lang="en"> \n'+
         '<head> \n &emsp; <title>website</title> \n &emsp; <style></style> \n </head> \n'+
-        '<body> \n' + html + '\n </body>'+
+        '<body> \n' + html + '\n '+ '<script>' + script + '</script> \n' + '</body>'+
         '\n </html>';
         let viewer = document.getElementById("viewer");
         viewer.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(website);
