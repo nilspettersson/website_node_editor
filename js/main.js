@@ -34,14 +34,17 @@ window.addEventListener('load', (event) => {
     }
 
     document.onkeydown = function(e){
-        if(e.key == "x"){
-            console.log(nodes);
+        if(e.key == "Delete"){
             let id = NodeBase.currentNode.id;
             document.getElementById("node" + id).remove();
 
-
             let index = nodes.indexOf(NodeBase.currentNode);
             if(NodeBase.currentNode.parent != null){
+                for(let i = 0; i < NodeBase.currentNode.nodes.length; i++){
+                    NodeBase.currentNode.nodes[i].parent = null;
+                    nodes.push(NodeBase.currentNode.nodes[i]);
+                }
+
                 let parentId = NodeBase.currentNode.parent.id;
                 let last = NodeBase.currentNode.parent.nodes.length - 1;
                 document.getElementsByClassName("input" + parentId)[last].remove();
@@ -286,7 +289,6 @@ class NodeBase{
                     let index = nodes.indexOf(this);
                     nodes.splice(index, 1);
                 }
-                console.log(nodes);
 
                 NodeBase.connectParent.addChild(this);
             }
@@ -474,7 +476,6 @@ function addDropdownClick(e){
 
 function addNewNode(e, type){
     let node = null;
-    console.log(e.clientX);
     if(type == "div"){
         node = new NodeDiv(e.x - 90, e.y - 46);
     }
