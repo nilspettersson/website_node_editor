@@ -239,22 +239,6 @@ class NodeBase{
         header.id = "header" + this.id;
         header.classList.add("header");
         header.classList.add("node-" + type);
-        /*header.onmousedown = (e) => {
-            NodeBase.lastMouseX = e.x;
-            NodeBase.lastMouseY = e.y;
-            NodeBase.mouseDown = true;
-            NodeBase.dragSetup = true;
-            NodeBase.currentNode = this;
-        }
-        header.onmouseup = (e) => {
-            NodeBase.mouseDown = false;
-        }*/
-        /*header.onmousedown = function(e){
-            console.log(this);
-        }
-        header.onmouseup = function(e){
-
-        }*/
 
         let headerText = document.createElement("p");
         headerText.innerHTML = type;
@@ -323,10 +307,24 @@ class NodeText extends NodeBase{
     }
 }
 
+class NodeHeader extends NodeBase{
+    constructor(x, y){
+        super(x, y, "header");
+        this.addComponent(this.textarea("h1"), true);
+    }
+}
+
 class NodeDiv extends NodeBase{
     constructor(x, y){
         super(x, y, "div");
         this.addComponent(this.input(0), false);
+    }
+}
+
+class NodeButton extends NodeBase{
+    constructor(x, y){
+        super(x, y, "button");
+        this.addComponent(this.textarea("button"), true);
     }
 }
 
@@ -416,13 +414,20 @@ function addDropdownClick(e){
     document.getElementById("add-content").classList.toggle("dropdown-content-click");
 }
 
-function addNewNode(type){
+function addNewNode(e, type){
     let node = null;
+    console.log(e.clientX);
     if(type == "div"){
-        node = new NodeDiv(0, 0);
+        node = new NodeDiv(e.x - 90, e.y - 46);
     }
     else if(type == "text"){
-        node = new NodeText(0, 0);
+        node = new NodeText(e.x - 90, e.y - 46);
+    }
+    else if(type == "header"){
+        node = new NodeHeader(e.x - 90, e.y - 46);
+    }
+    else if(type == "button"){
+        node = new NodeButton(e.x - 90, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;

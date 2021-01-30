@@ -23,12 +23,12 @@
 
 .menu{
     padding-left: 20px;
-    background: rgb(54, 54, 54);
+    background: rgb(61, 61, 61);
 }
 .menu-item{
     font-size: 0.9em;
     border: none;
-    background: rgb(54, 54, 54);
+    background: rgb(61, 61, 61);
     color: white;
     padding: 8px 8px;
     text-decoration: none;
@@ -42,50 +42,37 @@
     outline: none;
 }
 
-/*dropdown menu*/
-
-/* Dropdown Button */
-.dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
+.dropdown {
     position: relative;
     display: inline-block;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
+}
+
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.158);
     z-index: 1;
-  }
-  
-  .dropdown-content-click {
+}
+
+.dropdown-content-click {
     display: block;
-  }
+}
 
 .dropdown-item{
     text-align: left;
     font-size: 0.9em;
     width: 100%;
     border: none;
-    background: rgb(54, 54, 54);
+    background: rgb(49, 49, 49);
     color: white;
     padding: 4px 24px;
     text-decoration: none;
 }
 .dropdown-item:hover{
     cursor: pointer;
-    background: rgb(44, 44, 44);
+    background: rgb(41, 41, 41);
 }
 .dropdown-item:focus{
     border: none;

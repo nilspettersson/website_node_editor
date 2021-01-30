@@ -21,15 +21,15 @@
             <div class="dropdown">
                 <button class="menu-item" onclick="addDropdownClick(this)">Add</button>
                 <div id="add-content" class="dropdown-content">
-                  <input class="dropdown-item" type="button" value="div" onclick="addNewNode('div')">
-                  <input class="dropdown-item" type="button" value="text" onclick="addNewNode('text')">
+                  <input class="dropdown-item" type="button" value="div" onclick="addNewNode(event, 'div')">
+                  <input class="dropdown-item" type="button" value="text" onclick="addNewNode(event, 'text')">
+                  <input class="dropdown-item" type="button" value="Header" onclick="addNewNode(event, 'header')">
+                  <input class="dropdown-item" type="button" value="button" onclick="addNewNode(event, 'button')">
                 </div>
             </div>
             <input class="menu-item" type="button" value="Vertical" onclick="setVertical()">
             <input class="menu-item" type="button" value="Horizontal" onclick="setHorizontal()">
         </div>
-        
-        
 
         <div id="container" class="panel panel-horizontal">
             <div id="view" class="panel panel-vertical">
