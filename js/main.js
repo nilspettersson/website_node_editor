@@ -183,6 +183,7 @@ class NodeBase{
             html += "</div>";
         }
 
+        //get tag type fom data-tagType.
         for(let i = 0; i < children.length; i++){
             let tagType = children[i].getAttribute("data-tagType");
 
@@ -299,9 +300,14 @@ class NodeBase{
         return input;
     }
 
-    dropdown(items){
+    dropdownTagSelector(items){
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
+
+        //set the data-tagtype of nexr component.
+        dropdown.onchange = (e) => {
+            dropdown.nextSibling.setAttribute("data-tagType", dropdown.value);
+        }
 
         for(let i = 0; i < items.length; i++){
             let item = document.createElement("option");
@@ -328,7 +334,7 @@ class NodeText extends NodeBase{
 class NodeHeader extends NodeBase{
     constructor(x, y){
         super(x, y, "header");
-        this.addComponent(this.dropdown(Array("h1", "h2")));
+        this.addComponent(this.dropdownTagSelector(Array("h1", "h2")));
         this.addComponent(this.textarea("h1"), true);
     }
 }
