@@ -10,7 +10,9 @@ window.addEventListener('load', (event) => {
     editorCanvas = new EditorCanvas();
 
     nodes = [];
-    nodes.push(new NodeOutput(400, 120));
+    nodes.push(new NodeOutput(450, 120));
+    nodes.push(new NodeScript(10, 120));
+    nodes.push(new NodeButton(230, 120));
 
     nodes[0].getHtml();
 
@@ -174,7 +176,6 @@ class NodeBase{
 
     static connectParent = null;
     
-
     constructor(x, y, parent, type){
         this.id = nodeCount;
         this.type = type;
@@ -216,7 +217,6 @@ class NodeBase{
         }
 
         return html;
-        
     }
 
     //draws lines between parent and child nodes.
@@ -279,9 +279,7 @@ class NodeBase{
 
         let output = document.createElement("div");
         output.classList.add("output");
-        
         output.onmouseup = (e) =>{
-            
             if(NodeBase.connectParent != null){
                 if(this.parent == null){
                     let index = nodes.indexOf(this);
@@ -330,6 +328,46 @@ class NodeBase{
         }
 
         return input;
+    }
+
+    inputScript(index){
+        let input = document.createElement("div");
+        input.classList.add("node-input-script");
+        input.classList.add("input-script" + this.id);
+
+        let dropdown = this.dropdown(Array("onclick", "onchange", "onmouseout", "onmouseover", "onkeydown"));
+        input.append(dropdown);
+
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        input.append(dot);
+        dot.onmousedown = (e) =>{
+            NodeBase.connectParent = this;
+        }
+
+        return input;
+    }
+
+    dropdown(items){
+        let dropdown = document.createElement("select");
+        dropdown.classList.add("node-dropdown");
+
+        //set the data-tagtype of nexr component.
+        /*dropdown.onchange = (e) => {
+            dropdown.nextSibling.setAttribute("data-tagType", dropdown.value);
+        }*/
+
+        for(let i = 0; i < items.length; i++){
+            let item = document.createElement("option");
+            if(i == 0){
+                item.selected = true;
+            }
+            item.classList.add("dropdown-item");
+            item.value = items[i];
+            item.innerHTML = items[i];
+            dropdown.append(item);
+        }
+        return dropdown;
     }
 
     dropdownTagSelector(items){
@@ -382,6 +420,13 @@ class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
         this.addComponent(this.textarea("button"), true);
+        this.addComponent(this.inputScript(0));
+    }
+}
+
+class NodeScript extends NodeBase{
+    constructor(x, y, parent){
+        super(x, y, parent, "script");
     }
 }
 
@@ -484,6 +529,9 @@ function addNewNode(e, type){
     }
     else if(type == "button"){
         node = new NodeButton(e.x - 90, e.y - 46);
+    }
+    else if(type == "script"){
+        node = new NodeScript(e.x - 90, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;

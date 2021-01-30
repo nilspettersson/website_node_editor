@@ -101,7 +101,7 @@ iframe {
 
 .node{ 
     display: inline-block;
-    background: #2c2c2c;
+    background: #333333f5;
     border: 0.064em solid #ffffff00;
     border-radius: 10px;
     min-width: 12em;
@@ -149,16 +149,16 @@ iframe {
 
 
 .node-output{
-    background: #228a91;
+    background: rgb(34, 138, 145);
 }
 .node-div{
-    background: #226491;
+    background: rgb(34, 100, 145);
 }
 .node-text{
-    background: #389122;
+    background: rgb(56, 145, 34);
 }
 .node-header{
-    background: #917322;
+    background: rgb(145, 115, 34);
 }
 
 
@@ -212,4 +212,21 @@ iframe {
 .node-dropdown:hover{
     background: rgb(46, 46, 46);
     border: 0.064em solid rgba(255, 255, 255, 0.144);
+}
+
+
+.node-input-script{
+    position: relative;
+}
+
+.node-input-script .dot{
+    overflow: visible;
+    position: absolute;
+    left: -0.3em;
+    top: 0.95em;
+    height: 0.6em;
+    width: 0.6em;
+    background: #dac030;
+    border: calc(1em / 16) solid #000000af;
+    border-radius: 100%;
 }
