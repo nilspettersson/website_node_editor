@@ -38,11 +38,15 @@ window.addEventListener('load', (event) => {
             console.log(nodes);
             let id = NodeBase.currentNode.id;
             document.getElementById("node" + id).remove();
+
+
             let index = nodes.indexOf(NodeBase.currentNode);
-            if(index == -1){
-                for(let i = 0; i < nodes.length; i++){
-                    nodes[i].removeSelectedNode();
-                }
+            if(NodeBase.currentNode.parent != null){
+                let parentId = NodeBase.currentNode.parent.id;
+                let last = NodeBase.currentNode.parent.nodes.length - 1;
+                document.getElementsByClassName("input" + parentId)[last].remove();
+
+                NodeBase.currentNode.parent.nodes.splice(index, 1);
             }
             else{
                 nodes.splice(index, 1);
@@ -182,23 +186,6 @@ class NodeBase{
         node.parent = this;
         this.addComponent(this.input(nodes.length));
         this.nodes.push(node);
-    }
-
-    removeSelectedNode(){
-        //console.log(this.nodes);
-        let id = NodeBase.currentNode.id;
-        let index = this.nodes.indexOf(NodeBase.currentNode);
-        if(index == -1){
-            for(let i = 0; i < this.nodes.length; i++){
-                if(this.nodes[i].removeSelectedNode()){
-                    return true;
-                }
-            }
-        }
-        else{
-            this.nodes.splice(index, 1);
-            return true;
-        }
     }
 
     getHtml(){
