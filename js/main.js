@@ -461,7 +461,7 @@ class NodeHeader extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "header");
         this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")), "render-none");
-        this.addComponent(this.textarea("h1"), "render-none");
+        this.addComponent(this.textarea("h1"), "render");
     }
 }
 
@@ -551,7 +551,8 @@ function getChildNodesByClassName(parent, className){
     var children = [];
     for (var i = 0; i < parent.childNodes.length; i++) {
         if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
-            if (parent.childNodes[i].className.includes(className)) {
+            console.log(parent.childNodes[i].className);
+            if (parent.childNodes[i].classList.contains(className)) {
                 children.push(parent.childNodes[i]);
             }
         }
