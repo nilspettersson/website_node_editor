@@ -34,7 +34,8 @@ window.addEventListener('load', (event) => {
     }
 
     document.onkeydown = function(e){
-        if(e.key == "Delete"){
+        //removes selected node.
+        if(e.key == "Delete" && NodeBase.currentNode.type != "output"){
             let id = NodeBase.currentNode.id;
             document.getElementById("node" + id).remove();
 
@@ -280,17 +281,13 @@ class NodeBase{
         output.classList.add("output");
         
         output.onmouseup = (e) =>{
+            
             if(NodeBase.connectParent != null){
-                if(this.parent != null){
-                    let index = this.parent.indexOf(this);
-                    this.parent.splice(index, 1);
-                }
-                else{
+                if(this.parent == null){
                     let index = nodes.indexOf(this);
                     nodes.splice(index, 1);
+                    NodeBase.connectParent.addChild(this);
                 }
-
-                NodeBase.connectParent.addChild(this);
             }
         }
 
