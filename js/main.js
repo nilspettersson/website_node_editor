@@ -74,7 +74,7 @@ document.onmousemove = function(e){
     //if mouse down on input node create line from input to mouse position.
     if(NodeBase.connectParent != null){
         let node = document.getElementById("node" + NodeBase.connectParent.id);
-        let input = node.getElementsByClassName("node-input")[NodeBase.connectParent.nodes.length];
+        let input = node.getElementsByClassName("node-" + NodeBase.connectType)[NodeBase.connectParent.nodes.length];
 
         let startX = input.getBoundingClientRect().x;
         let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2;
@@ -175,6 +175,7 @@ class NodeBase{
     static currentNode = null;
 
     static connectParent = null;
+    static connectType = "";
     
     constructor(x, y, parent, type){
         this.id = nodeCount;
@@ -188,9 +189,17 @@ class NodeBase{
 
     //add child will add child node and add a input for the next child node.
     addChild(node){
-        node.parent = this;
-        this.addComponent(this.input(nodes.length));
-        this.nodes.push(node);
+        if(node.type == "script"){
+            node.parent = this;
+            this.addComponent(this.inputScript(nodes.length));
+            this.nodes.push(node);
+        }
+        else{
+            node.parent = this;
+            this.addComponent(this.input(nodes.length));
+            this.nodes.push(node);
+        }
+        
     }
 
     getHtml(){
@@ -222,7 +231,13 @@ class NodeBase{
     //draws lines between parent and child nodes.
     drawLines(){
         for(let i = 0; i < this.nodes.length; i++){
-            let node = document.getElementsByClassName("input" + this.id)[i];
+            let node;
+            if(this.nodes[i].type == "script"){
+                node = document.getElementsByClassName("input-script" + this.id)[i];
+            }
+            else{
+                node = document.getElementsByClassName("input" + this.id)[i];
+            }
 
             let startX = node.getBoundingClientRect().x;
             let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2;
@@ -231,7 +246,7 @@ class NodeBase{
             let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width;
             let endY = childNode.getBoundingClientRect().y + 20;
             editorCanvas.drawLine(startX, startY, endX, endY);
-
+            
             this.nodes[i].drawLines();
         }
     }
@@ -277,14 +292,30 @@ class NodeBase{
         content.classList.add("content");
 
 
-        let output = document.createElement("div");
-        output.classList.add("output");
-        output.onmouseup = (e) =>{
-            if(NodeBase.connectParent != null){
-                if(this.parent == null){
-                    let index = nodes.indexOf(this);
-                    nodes.splice(index, 1);
-                    NodeBase.connectParent.addChild(this);
+        let output;
+        if(type == "script"){
+            output = document.createElement("div");
+            output.classList.add("output-script");
+            output.onmouseup = (e) =>{
+                if(NodeBase.connectParent != null){
+                    if(this.parent == null){
+                        let index = nodes.indexOf(this);
+                        nodes.splice(index, 1);
+                        NodeBase.connectParent.addChild(this);
+                    }
+                }
+            }
+        }
+        else{
+            output = document.createElement("div");
+            output.classList.add("output");
+            output.onmouseup = (e) =>{
+                if(NodeBase.connectParent != null){
+                    if(this.parent == null){
+                        let index = nodes.indexOf(this);
+                        nodes.splice(index, 1);
+                        NodeBase.connectParent.addChild(this);
+                    }
                 }
             }
         }
@@ -325,6 +356,7 @@ class NodeBase{
         let nodeId = this.id;
         dot.onmousedown = (e) =>{
             NodeBase.connectParent = this;
+            NodeBase.connectType = "input";
         }
 
         return input;
@@ -343,6 +375,7 @@ class NodeBase{
         input.append(dot);
         dot.onmousedown = (e) =>{
             NodeBase.connectParent = this;
+            NodeBase.connectType = "input-script";
         }
 
         return input;
