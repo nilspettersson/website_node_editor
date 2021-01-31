@@ -452,6 +452,25 @@ class NodeBase{
         return input;
     }
 
+    inputStyle(){
+        let input = document.createElement("div");
+        input.classList.add("node-input-style");
+        input.classList.add("input-style" + this.id);
+
+        let dropdown = this.dropdown(Array("default", "max-width:1600", "max-width:1400", "max-width:1200", "max-width:1000", "max-width:800", "max-width:600", "max-width:400"));
+        input.append(dropdown);
+
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        input.append(dot);
+        dot.onmousedown = (e) =>{
+            NodeBase.connectParent = this;
+            NodeBase.connectType = "input-style";
+        }
+
+        return input;
+    }
+
     inputStyleManager(){
         let input = document.createElement("div");
         input.classList.add("node-input-style-manager");
@@ -551,7 +570,7 @@ class NodeScript extends NodeBase{
 class NodeStyleManager extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style-manager");
-        this.addComponent(this.inputScript(), "event");
+        this.addComponent(this.inputStyle(), "event");
     }
 }
 

@@ -299,3 +299,19 @@ iframe {
     border: calc(1rem / 16) solid #000000af;
     border-radius: 100%;
 }
+
+.node-input-style{
+    position: relative;
+}
+
+.node-input-style .dot{
+    overflow: visible;
+    position: absolute;
+    left: -0.3em;
+    top: 0.95em;
+    height: 0.6em;
+    width: 0.6em;
+    background: #307fda;
+    border: calc(1em / 16) solid #000000af;
+    border-radius: 100%;
+}
