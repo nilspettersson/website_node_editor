@@ -430,6 +430,22 @@ class NodeBase{
         return input;
     }
 
+    inputStyleManager(){
+        let input = document.createElement("div");
+        input.classList.add("node-input-style-manager");
+        input.classList.add("input-style-manager" + this.id);
+
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        input.append(dot);
+        dot.onmousedown = (e) =>{
+            NodeBase.connectParent = this;
+            NodeBase.connectType = "input-style";
+        }
+
+        return input;
+    }
+
     dropdown(items){
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
@@ -510,10 +526,18 @@ class NodeScript extends NodeBase{
     }
 }
 
+class NodeStyleManager extends NodeBase{
+    constructor(x, y, parent){
+        super(x, y, parent, "style-manager");
+        this.addComponent(this.inputScript(), "event");
+    }
+}
+
 class NodeOutput extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "output");
-        this.addComponent(this.input(0), "render-none");
+        this.addComponent(this.input(), "render-none");
+        this.addComponent(this.inputStyleManager(), "render-none");
     }
 
     getHtml(){
@@ -613,6 +637,9 @@ function addNewNode(e, type){
     }
     else if(type == "script"){
         node = new NodeScript(e.x - 90, e.y - 46);
+    }
+    else if(type == "style manager"){
+        node = new NodeStyleManager(e.x - 90, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;
