@@ -208,13 +208,13 @@ class NodeBase{
         let html = "";
 
         //all node script children. add functions.
-        for(let i = 0; i < this.nodes.length; i++){
+        /*for(let i = 0; i < this.nodes.length; i++){
             if(this.nodes[i].type == "script"){
                 script += "function event" + this.id + i + "(event){";
                 this.nodes[i].getHtml();
                 script += "}";
             }
-        }
+        }*/
 
         let parent = document.getElementById("content" + this.id);
 
@@ -248,12 +248,30 @@ class NodeBase{
 
 
         //add script. adds the script content from the child script nodes
+        /*let scripts = getChildNodesByClassName(parent, "render-script");
+        for(let i = 0; i < scripts.length; i++){
+            script += scripts[i].value;
+        }*/
+        
+        return html;
+    }
+
+    //adds the javascript code to script tag. 
+    getScript(){
+        //all script children. add functions for events.
+        for(let i = 0; i < this.nodes.length; i++){
+            if(this.nodes[i].type == "script"){
+                script += "function event" + this.id + i + "(event){";
+                this.nodes[i].getScript();
+                script += "}";
+            }
+        }
+
+        //add script. adds the script content from the child script nodes and puts it in function
         let scripts = getChildNodesByClassName(parent, "render-script");
         for(let i = 0; i < scripts.length; i++){
             script += scripts[i].value;
         }
-        
-        return html;
     }
 
     //draws lines between parent and child nodes.
@@ -262,10 +280,12 @@ class NodeBase{
         let scriptIndex = 0;
         for(let i = 0; i < this.nodes.length; i++){
             let node;
+            //if the child node is a script find script input node of parent.
             if(this.nodes[i].type == "script"){
                 node = document.getElementsByClassName("input-script" + this.id)[scriptIndex];
                 scriptIndex++;
             }
+            //if the child node is a html node find input node of parent.
             else{
                 node = document.getElementsByClassName("input" + this.id)[inputIndex];
                 inputIndex++;
@@ -513,12 +533,12 @@ class NodeOutput extends NodeBase{
     }
 
     getHtml(){
-        //let children = getChildNodes(document.getElementById("content" + this.id), "render");
 
         let html = "";
         script = "";
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
+            script += this.nodes[i].getScript();
         }
 
 
