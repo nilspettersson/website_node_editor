@@ -171,6 +171,18 @@ iframe {
     border-radius: 100%;
 }
 
+.node .output-style{
+    overflow: visible;
+    position: absolute;
+    right: -0.3em;
+    top: 0.9em;
+    height: 0.6em;
+    width: 0.6em;
+    background: #307fda;
+    border: calc(1em / 16) solid #000000af;
+    border-radius: 100%;
+}
+
 
 .node-output{
     background: rgb(34, 138, 145);
@@ -193,7 +205,9 @@ iframe {
 .node-style-manager{
     background: rgb(184, 48, 218);
 }
-
+.node-style{
+    background: #307fda;
+}
 
 .node-input{
     position: relative;
@@ -213,12 +227,13 @@ iframe {
 }
 
 .node-textarea{
-    display: inline-block;
+    display: block;
     resize: none;
-    border: 0.064em solid rgba(0, 0, 0, 0);
-    border-radius: 0.14em;
-    padding: 0.5em;
-    height: 5em;
+    border: 0.064rem solid rgba(0, 0, 0, 0);
+    border-radius: 0.14rem;
+    padding: 0.3rem;
+    margin:0.5rem auto;
+    height: 5rem;
     width: 90%;
     outline: none;
 }
@@ -232,30 +247,31 @@ iframe {
 }
 
 .node-input-field{
-    display: inline-block;
+    display: block;
     resize: none;
-    border: 0.064em solid rgba(0, 0, 0, 0);
-    border-radius: 0.14em;
-    padding: 0.3em;
+    border: 0.064rem solid rgba(0, 0, 0, 0);
+    border-radius: 0.14rem;
+    padding: 0.2rem 0.3rem;
+    margin:0.5rem auto;
     width: 90%;
     outline: none;
 }
 .node-input-field:hover{
     outline: none;
-    border: 0.064em solid rgba(0, 0, 0, 0);
+    border: 0.064rem solid rgba(0, 0, 0, 0);
 }
 .node-input-field:focus{
-    border: 0.064em solid #1873bee0;
-    box-shadow: 0em 0em 0.2em #1873be8c;
+    border: 0.064rem solid #1873bee0;
+    box-shadow: 0rem 0rem 0.2rem #1873be8c;
 }
 
 .node-dropdown{
     margin: 0.5rem 0rem;
     background: rgb(41, 41, 41);
     color:white;
-    border: 0.064em solid rgba(0, 0, 0, 0);
+    border: 0.064rem solid rgba(0, 0, 0, 0);
     border-radius: 0.14rem;
-    padding: 0.1em 0.4rem;
+    padding: 0.1rem 0.4rem;
     width: 90%;
     outline: none;
 }
@@ -311,6 +327,23 @@ iframe {
     top: 0.95em;
     height: 0.6em;
     width: 0.6em;
+    background: #307fda;
+    border: calc(1em / 16) solid #000000af;
+    border-radius: 100%;
+}
+
+.node-input-style-inherit{
+    position: relative;
+    height: 1.6rem;
+}
+
+.node-input-style-inherit .dot{
+    overflow: visible;
+    position: absolute;
+    left: -0.3rem;
+    top: 0.5rem;
+    height: 0.6rem;
+    width: 0.6rem;
     background: #307fda;
     border: calc(1em / 16) solid #000000af;
     border-radius: 100%;

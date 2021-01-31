@@ -13,7 +13,8 @@ window.addEventListener('load', (event) => {
     nodes.push(new NodeOutput(450, 120));
     nodes.push(new NodeScript(10, 220));
     nodes.push(new NodeButton(230, 220));
-    nodes.push(new NodeStyleManager(200, 80));
+    nodes.push(new NodeStyleManager(240, 80));
+    nodes.push(new NodeStyle(10, 80));
 
     nodes[0].getHtml();
 
@@ -199,6 +200,11 @@ class NodeBase{
             node.parent = this;
             this.nodes.push(node);
         }
+        else if(node.type == "style"){
+            node.parent = this;
+            this.addComponent(this.inputStyle(), "event");
+            this.nodes.push(node);
+        }
         else{
             node.parent = this;
             this.addComponent(this.input(nodes.length));
@@ -263,10 +269,33 @@ class NodeBase{
         return script;
     }
 
+    //adds the javascript code to script tag. 
+    getStyle(){
+        let style = "";
+        let parent = document.getElementById("content" + this.id);
+        //all script children. add functions for events.
+        for(let i = 0; i < this.nodes.length; i++){
+            if(this.nodes[i].type == "style"){
+                style += "function event" + this.id + i + "(event){";
+                style += this.nodes[i].getStyle();
+                style += "}";
+            }
+        }
+
+        //add script. adds the script content from the child script nodes and puts it in function
+        let styles = getChildNodesByClassName(parent, "render-style");
+        for(let i = 0; i < styles.length; i++){
+            style += styles[i].value;
+        }
+
+        return style;
+    }
+
     //draws lines between parent and child nodes.
     drawLines(){
         let inputIndex = 0;
         let scriptIndex = 0;
+        let styleIndex = 0;
         for(let i = 0; i < this.nodes.length; i++){
             let node;
             //if the child node is a script find script input node of parent.
@@ -276,7 +305,10 @@ class NodeBase{
             }
             else if(this.nodes[i].type == "style-manager"){
                 node = document.getElementsByClassName("input-style-manager" + this.id)[0];
-                scriptIndex++;
+            }
+            else if(this.nodes[i].type == "style"){
+                node = document.getElementsByClassName("input-style" + this.id)[styleIndex];
+                styleIndex++;
             }
             //if the child node is a html node find input node of parent.
             else{
@@ -356,6 +388,19 @@ class NodeBase{
             output.classList.add("output-style-manager");
             output.onmouseup = (e) =>{
                 if(NodeBase.connectParent != null && NodeBase.connectType == "input-style-manager"){
+                    if(this.parent == null){
+                        let index = nodes.indexOf(this);
+                        nodes.splice(index, 1);
+                        NodeBase.connectParent.addChild(this);
+                    }
+                }
+            }
+        }
+        else if(type == "style"){
+            output = document.createElement("div");
+            output.classList.add("output-style");
+            output.onmouseup = (e) =>{
+                if(NodeBase.connectParent != null && NodeBase.connectType == "input-style"){
                     if(this.parent == null){
                         let index = nodes.indexOf(this);
                         nodes.splice(index, 1);
@@ -471,6 +516,22 @@ class NodeBase{
         return input;
     }
 
+    inputStyleInherit(){
+        let input = document.createElement("div");
+        input.classList.add("node-input-style-inherit");
+        input.classList.add("input-style-inherit" + this.id);
+
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        input.append(dot);
+        dot.onmousedown = (e) =>{
+            NodeBase.connectParent = this;
+            NodeBase.connectType = "input-style";
+        }
+
+        return input;
+    }
+
     inputStyleManager(){
         let input = document.createElement("div");
         input.classList.add("node-input-style-manager");
@@ -574,6 +635,15 @@ class NodeStyleManager extends NodeBase{
     }
 }
 
+class NodeStyle extends NodeBase{
+    constructor(x, y, parent){
+        super(x, y, parent, "style");
+        this.addComponent(this.inputField("button"), "render");
+        this.addComponent(this.textarea("style"), "render-style");
+        this.addComponent(this.inputStyleInherit(), "event");
+    }
+}
+
 class NodeOutput extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "output");
@@ -584,16 +654,18 @@ class NodeOutput extends NodeBase{
     getHtml(){
         let html = "";
         let script = "";
+        let style = "";
         
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
             script += this.nodes[i].getScript();
+            style += this.nodes[i].getStyle();
         }
 
 
         let website = '<!DOCTYPE html> \n' +
         '<html lang="en"> \n'+
-        '<head> \n &emsp; <title>website</title> \n &emsp; <style></style> \n </head> \n'+
+        '<head> \n &emsp; <title>website</title> \n &emsp; <style>' + style + '</style> \n </head> \n'+
         '<body> \n' + html + '\n '+ '<script>' + script + '</script> \n' + '</body>'+
         '\n </html>';
         let viewer = document.getElementById("viewer");
@@ -606,6 +678,8 @@ class NodeOutput extends NodeBase{
 
         let code = document.getElementById("code");
         code.innerHTML = html;
+
+        console.log(style);
         
     }
     
@@ -681,6 +755,9 @@ function addNewNode(e, type){
     }
     else if(type == "style manager"){
         node = new NodeStyleManager(e.x - 90, e.y - 46);
+    }
+    else if(type == "style"){
+        node = new NodeStyle(e.x - 90, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;
