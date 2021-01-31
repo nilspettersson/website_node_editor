@@ -11,10 +11,6 @@ window.addEventListener('load', (event) => {
 
     nodes = [];
     nodes.push(new NodeOutput(450, 120));
-    nodes.push(new NodeScript(10, 220));
-    nodes.push(new NodeButton(230, 220));
-    nodes.push(new NodeStyleManager(240, 80));
-    nodes.push(new NodeStyle(10, 80));
 
     nodes[0].getHtml();
 
@@ -693,7 +689,6 @@ class NodeOutput extends NodeBase{
         let code = document.getElementById("code");
         code.innerHTML = html + "style:<br>" + style;
 
-        console.log(style);
         
     }
     
