@@ -11,8 +11,9 @@ window.addEventListener('load', (event) => {
 
     nodes = [];
     nodes.push(new NodeOutput(450, 120));
-    nodes.push(new NodeScript(10, 120));
-    nodes.push(new NodeButton(230, 120));
+    nodes.push(new NodeScript(10, 220));
+    nodes.push(new NodeButton(230, 220));
+    nodes.push(new NodeStyleManager(200, 80));
 
     nodes[0].getHtml();
 
@@ -194,6 +195,10 @@ class NodeBase{
             this.addComponent(this.inputScript(), "event");
             this.nodes.push(node);
         }
+        else if(node.type == "style-manager"){
+            node.parent = this;
+            this.nodes.push(node);
+        }
         else{
             node.parent = this;
             this.addComponent(this.input(nodes.length));
@@ -269,6 +274,10 @@ class NodeBase{
                 node = document.getElementsByClassName("input-script" + this.id)[scriptIndex];
                 scriptIndex++;
             }
+            else if(this.nodes[i].type == "style-manager"){
+                node = document.getElementsByClassName("input-style-manager" + this.id)[0];
+                scriptIndex++;
+            }
             //if the child node is a html node find input node of parent.
             else{
                 node = document.getElementsByClassName("input" + this.id)[inputIndex];
@@ -334,6 +343,19 @@ class NodeBase{
             output.classList.add("output-script");
             output.onmouseup = (e) =>{
                 if(NodeBase.connectParent != null && NodeBase.connectType == "input-script"){
+                    if(this.parent == null){
+                        let index = nodes.indexOf(this);
+                        nodes.splice(index, 1);
+                        NodeBase.connectParent.addChild(this);
+                    }
+                }
+            }
+        }
+        else if(type == "style-manager"){
+            output = document.createElement("div");
+            output.classList.add("output-style-manager");
+            output.onmouseup = (e) =>{
+                if(NodeBase.connectParent != null && NodeBase.connectType == "input-style-manager"){
                     if(this.parent == null){
                         let index = nodes.indexOf(this);
                         nodes.splice(index, 1);
@@ -440,7 +462,7 @@ class NodeBase{
         input.append(dot);
         dot.onmousedown = (e) =>{
             NodeBase.connectParent = this;
-            NodeBase.connectType = "input-style";
+            NodeBase.connectType = "input-style-manager";
         }
 
         return input;
@@ -536,8 +558,8 @@ class NodeStyleManager extends NodeBase{
 class NodeOutput extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "output");
-        this.addComponent(this.input(), "render-none");
         this.addComponent(this.inputStyleManager(), "render-none");
+        this.addComponent(this.input(), "render-none");
     }
 
     getHtml(){
