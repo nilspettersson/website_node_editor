@@ -276,16 +276,17 @@ class NodeBase{
         //all script children. add functions for events.
         for(let i = 0; i < this.nodes.length; i++){
             if(this.nodes[i].type == "style"){
-                style += "function event" + this.id + i + "(event){";
                 style += this.nodes[i].getStyle();
-                style += "}";
             }
         }
 
         //add script. adds the script content from the child script nodes and puts it in function
         let styles = getChildNodesByClassName(parent, "render-style");
         for(let i = 0; i < styles.length; i++){
+            let className = styles[i].getAttribute("data-value");
+            style += '.' + className + '{';
             style += styles[i].value;
+            style += '}';
         }
 
         return style;
@@ -587,6 +588,19 @@ class NodeBase{
         return dropdown;
     }
 
+    //input field that gives its value to sibling, data-value
+    inputFieldData(){
+        let text = document.createElement("input");
+        text.classList.add("node-input-field");
+        text.spellcheck = false;
+
+        //set the data-value of next component.
+        text.onchange = (e) => {
+            text.nextSibling.setAttribute("data-value", text.value);
+        }
+        return text;
+    }
+
 }
 
 class NodeText extends NodeBase{
@@ -616,7 +630,7 @@ class NodeDiv extends NodeBase{
 class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
-        this.addComponent(this.inputField("button"), "render");
+        this.addComponent(this.inputField("class"), "render-class");
         this.addComponent(this.inputScript(), "event");
     }
 }
@@ -638,7 +652,7 @@ class NodeStyleManager extends NodeBase{
 class NodeStyle extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style");
-        this.addComponent(this.inputField("button"), "render");
+        this.addComponent(this.inputFieldData(), "render-none");
         this.addComponent(this.textarea("style"), "render-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
