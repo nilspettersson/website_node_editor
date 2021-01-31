@@ -44,20 +44,23 @@ window.addEventListener('load', (event) => {
             let id = NodeBase.currentNode.id;
             document.getElementById("node" + id).remove();
 
-            let index = nodes.indexOf(NodeBase.currentNode);
             if(NodeBase.currentNode.parent != null){
+                let index = NodeBase.currentNode.parent.nodes.indexOf(NodeBase.currentNode);
+
                 for(let i = 0; i < NodeBase.currentNode.nodes.length; i++){
                     NodeBase.currentNode.nodes[i].parent = null;
                     nodes.push(NodeBase.currentNode.nodes[i]);
                 }
-
+                console.log(index);
                 let parentId = NodeBase.currentNode.parent.id;
                 let last = NodeBase.currentNode.parent.nodes.length - 1;
-                document.getElementsByClassName("input" + parentId)[last].remove();
+                document.getElementsByClassName("node-all-input-types" + parentId)[last].remove();
 
                 NodeBase.currentNode.parent.nodes.splice(index, 1);
             }
             else{
+                let index = nodes.indexOf(NodeBase.currentNode);
+                
                 nodes.splice(index, 1);
             }
         }
@@ -476,6 +479,7 @@ class NodeBase{
         let input = document.createElement("div");
         input.classList.add("node-input");
         input.classList.add("input" + this.id);
+        input.classList.add("node-all-input-types" + this.id);
     
         let dot = document.createElement("div");
         dot.classList.add("dot");
@@ -494,6 +498,7 @@ class NodeBase{
         let input = document.createElement("div");
         input.classList.add("node-input-script");
         input.classList.add("input-script" + this.id);
+        input.classList.add("node-all-input-types" + this.id);
 
         let dropdown = this.dropdown(Array("onclick", "onchange", "onmouseout", "onmouseover", "onkeydown"));
         input.append(dropdown);
@@ -513,6 +518,7 @@ class NodeBase{
         let input = document.createElement("div");
         input.classList.add("node-input-style");
         input.classList.add("input-style" + this.id);
+        input.classList.add("node-all-input-types" + this.id);
 
         let dropdown = this.dropdown(Array("default", "max-width:1600", "max-width:1400", "max-width:1200", "max-width:1000", "max-width:800", "max-width:600", "max-width:400"));
         input.append(dropdown);
@@ -532,6 +538,7 @@ class NodeBase{
         let input = document.createElement("div");
         input.classList.add("node-input-style-inherit");
         input.classList.add("input-style-inherit" + this.id);
+        input.classList.add("node-all-input-types" + this.id);
 
         let dot = document.createElement("div");
         dot.classList.add("dot");
@@ -581,7 +588,7 @@ class NodeBase{
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
 
-        dropdown.onclick = (e) => {
+        dropdown.onmousedown = (e) => {
             dropdown.innerHTML = "";
             let classes = css.split(' ');
             for(let i = 0; i < classes.length - 1; i++){
@@ -650,6 +657,7 @@ class NodeBase{
 class NodeText extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "text");
+        this.addComponent(this.dropdownClassSelector(), "class");
         this.addComponent(this.textarea("p"), "render");
     }
 }
@@ -657,6 +665,7 @@ class NodeText extends NodeBase{
 class NodeHeader extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "header");
+        this.addComponent(this.dropdownClassSelector(), "class");
         this.addComponent(this.dropdownTagSelector(Array("h1", "h2", "h3", "h4", "h5")), "render-none");
         this.addComponent(this.textarea("h1"), "render");
     }
@@ -675,6 +684,7 @@ class NodeDiv extends NodeBase{
 class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
+        this.addComponent(this.dropdownClassSelector(), "class");
         this.addComponent(this.inputField("button"), "render");
         this.addComponent(this.inputScript(), "event");
     }
