@@ -286,7 +286,7 @@ class NodeBase{
             let className = styles[i].getAttribute("data-value");
             style += '.' + className + '{';
             style += styles[i].value;
-            style += '}';
+            style += '} ';
         }
 
         return style;
@@ -630,7 +630,7 @@ class NodeDiv extends NodeBase{
 class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
-        this.addComponent(this.inputField("class"), "render-class");
+        this.addComponent(this.inputField("button"), "render");
         this.addComponent(this.inputScript(), "event");
     }
 }
@@ -691,7 +691,7 @@ class NodeOutput extends NodeBase{
         html = html.replaceAll("\n", "<br>");
 
         let code = document.getElementById("code");
-        code.innerHTML = html;
+        code.innerHTML = html + "style:<br>" + style;
 
         console.log(style);
         
