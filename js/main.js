@@ -76,7 +76,7 @@ document.onmousemove = function(e){
     //if mouse down on input node create line from input to mouse position.
     if(NodeBase.connectParent != null){
         let node = document.getElementById("node" + NodeBase.connectParent.id);
-        let input = node.getElementsByClassName("node-" + NodeBase.connectType)[NodeBase.connectParent.nodes.length];
+        let input = node.getElementsByClassName("node-" + NodeBase.connectType)[node.getElementsByClassName("node-" + NodeBase.connectType).length - 1];
 
         let startX = input.getBoundingClientRect().x;
         let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2;
@@ -206,13 +206,13 @@ class NodeBase{
 
     getHtml(){
         let html = "";
-        if(this.type == "div"){
+        /*if(this.type == "div"){
             html += "<div>";
             for(let i = 0; i < this.nodes.length; i++){
                 html += this.nodes[i].getHtml();
             }
             html += "</div>";
-        }
+        }*/
 
         //all node script children. add functions.
         for(let i = 0; i < this.nodes.length; i++){
@@ -239,11 +239,18 @@ class NodeBase{
         for(let i = 0; i < children.length; i++){
             //get tag type fom data-tagType.
             let tagType = children[i].getAttribute("data-tagType");
-
-            html += "<" + tagType + " " + atributes + ">" + children[i].value + "</" + tagType + ">";
+            if(tagType == "div"){
+                html += "<" + tagType + " " + atributes + ">";
+                for(let i = 0; i < this.nodes.length; i++){
+                    html += this.nodes[i].getHtml();
+                }
+                html += "</" + tagType + ">";
+            }
+            else{
+                html += "<" + tagType + " " + atributes + ">" + children[i].value + "</" + tagType + ">";
+            }
             //html = html.replaceAll("\n", "<br>");
         }
-
 
 
 
@@ -251,22 +258,24 @@ class NodeBase{
         let scripts = getChildNodesByClassName(parent, "render-script");
         for(let i = 0; i < scripts.length; i++){
             script += scripts[i].value;
-            //console.log(scripts[i].value);
         }
-        
         
         return html;
     }
 
     //draws lines between parent and child nodes.
     drawLines(){
+        let inputIndex = 0;
+        let scriptIndex = 0;
         for(let i = 0; i < this.nodes.length; i++){
             let node;
             if(this.nodes[i].type == "script"){
-                node = document.getElementsByClassName("input-script" + this.id)[i];
+                node = document.getElementsByClassName("input-script" + this.id)[inputIndex];
+                scriptIndex++;
             }
             else{
-                node = document.getElementsByClassName("input" + this.id)[i];
+                node = document.getElementsByClassName("input" + this.id)[inputIndex];
+                inputIndex++;
             }
 
             let startX = node.getBoundingClientRect().x;
@@ -364,9 +373,24 @@ class NodeBase{
         document.getElementById("content" + this.id).append(component);
     }
 
+    div(){
+        let div = document.createElement("div");
+        div.setAttribute("data-tagType", "div");
+        div.spellcheck = false;
+        return div;
+    }
+
     textarea(tagType){
         let text = document.createElement("textarea");
         text.classList.add("node-textarea");
+        text.setAttribute("data-tagType", tagType);
+        text.spellcheck = false;
+        return text;
+    }
+
+    inputField(tagType){
+        let text = document.createElement("input");
+        text.classList.add("node-input-field");
         text.setAttribute("data-tagType", tagType);
         text.spellcheck = false;
         return text;
@@ -468,14 +492,16 @@ class NodeHeader extends NodeBase{
 class NodeDiv extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "div");
-        this.addComponent(this.input(0), "render");
+        this.addComponent(this.input(), "render-none");
+        this.addComponent(this.div(), "render");
+        this.addComponent(this.inputScript(), "event");
     }
 }
 
 class NodeButton extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "button");
-        this.addComponent(this.textarea("button"), "render");
+        this.addComponent(this.inputField("button"), "render");
         this.addComponent(this.inputScript(), "event");
     }
 }
@@ -551,7 +577,6 @@ function getChildNodesByClassName(parent, className){
     var children = [];
     for (var i = 0; i < parent.childNodes.length; i++) {
         if(parent.childNodes[i].nodeType == Node.ELEMENT_NODE){
-            console.log(parent.childNodes[i].className);
             if (parent.childNodes[i].classList.contains(className)) {
                 children.push(parent.childNodes[i]);
             }
