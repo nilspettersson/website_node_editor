@@ -206,13 +206,6 @@ class NodeBase{
 
     getHtml(){
         let html = "";
-        /*if(this.type == "div"){
-            html += "<div>";
-            for(let i = 0; i < this.nodes.length; i++){
-                html += this.nodes[i].getHtml();
-            }
-            html += "</div>";
-        }*/
 
         //all node script children. add functions.
         for(let i = 0; i < this.nodes.length; i++){
@@ -270,7 +263,7 @@ class NodeBase{
         for(let i = 0; i < this.nodes.length; i++){
             let node;
             if(this.nodes[i].type == "script"){
-                node = document.getElementsByClassName("input-script" + this.id)[inputIndex];
+                node = document.getElementsByClassName("input-script" + this.id)[scriptIndex];
                 scriptIndex++;
             }
             else{
