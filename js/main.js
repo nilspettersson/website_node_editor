@@ -4,8 +4,6 @@ let editorDrag = false;
 
 let nodes;
 
-let script = "";
-
 let editorCanvas;
 
 window.addEventListener('load', (event) => {
@@ -207,17 +205,7 @@ class NodeBase{
     getHtml(){
         let html = "";
 
-        //all node script children. add functions.
-        /*for(let i = 0; i < this.nodes.length; i++){
-            if(this.nodes[i].type == "script"){
-                script += "function event" + this.id + i + "(event){";
-                this.nodes[i].getHtml();
-                script += "}";
-            }
-        }*/
-
         let parent = document.getElementById("content" + this.id);
-
         //add event attribute. gets all input components with type event to add event atributes to node.
         let atributes = "";
         let scriptEvents = getChildNodesByClassName(parent, "event");
@@ -244,25 +232,19 @@ class NodeBase{
             }
             //html = html.replaceAll("\n", "<br>");
         }
-
-
-
-        //add script. adds the script content from the child script nodes
-        /*let scripts = getChildNodesByClassName(parent, "render-script");
-        for(let i = 0; i < scripts.length; i++){
-            script += scripts[i].value;
-        }*/
         
         return html;
     }
 
     //adds the javascript code to script tag. 
     getScript(){
+        let script = "";
+        let parent = document.getElementById("content" + this.id);
         //all script children. add functions for events.
         for(let i = 0; i < this.nodes.length; i++){
             if(this.nodes[i].type == "script"){
                 script += "function event" + this.id + i + "(event){";
-                this.nodes[i].getScript();
+                script += this.nodes[i].getScript();
                 script += "}";
             }
         }
@@ -272,6 +254,8 @@ class NodeBase{
         for(let i = 0; i < scripts.length; i++){
             script += scripts[i].value;
         }
+
+        return script;
     }
 
     //draws lines between parent and child nodes.
@@ -533,9 +517,9 @@ class NodeOutput extends NodeBase{
     }
 
     getHtml(){
-
         let html = "";
-        script = "";
+        let script = "";
+        
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
             script += this.nodes[i].getScript();
