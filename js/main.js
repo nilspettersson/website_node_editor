@@ -2,8 +2,9 @@
 let nodeCount = 0;
 let editorDrag = false;
 
-let nodes;
+let css = "";
 
+let nodes;
 let editorCanvas;
 
 window.addEventListener('load', (event) => {
@@ -11,6 +12,10 @@ window.addEventListener('load', (event) => {
 
     nodes = [];
     nodes.push(new NodeOutput(450, 120));
+    nodes.push(new NodeDiv(230, 220));
+    nodes.push(new NodeButton(10, 220));
+    nodes.push(new NodeStyleManager(240, 80));
+    nodes.push(new NodeStyle(10, 0));
 
     nodes[0].getHtml();
 
@@ -214,13 +219,23 @@ class NodeBase{
 
         let parent = document.getElementById("content" + this.id);
         //add event attribute. gets all input components with type event to add event atributes to node.
-        let atributes = "";
+        let events = "";
         let scriptEvents = getChildNodesByClassName(parent, "event");
         for(let i = 0; i < scriptEvents.length; i++){
-            let atribute = scriptEvents[i].getElementsByTagName("select")[0].value;
-            atributes += ' ' + atribute + '="event' + this.id + i + '(this)"';
+            let event = scriptEvents[i].getElementsByTagName("select")[0].value;
+            events += ' ' + event + '="event' + this.id + i + '(this)"';
             
         }
+
+        //gets the class name  from component.
+        let classes = getChildNodesByClassName(parent, "class");
+        let classList = 'class="';
+        for(let i = 0; i < classes.length; i++){
+            let atribute = classes[i].value;
+            classList += atribute + ' ';
+        }
+        classList += '"';
+
         
         //we get all components with class: render.
         let children = getChildNodesByClassName(parent, "render");
@@ -228,16 +243,15 @@ class NodeBase{
             //get tag type fom data-tagType.
             let tagType = children[i].getAttribute("data-tagType");
             if(tagType == "div"){
-                html += "<" + tagType + " " + atributes + ">";
+                html += "<" + tagType + " " + classList + " " + events + ">";
                 for(let i = 0; i < this.nodes.length; i++){
                     html += this.nodes[i].getHtml();
                 }
                 html += "</" + tagType + ">";
             }
             else{
-                html += "<" + tagType + " " + atributes + ">" + children[i].value + "</" + tagType + ">";
+                html += "<" + tagType + " " + classList + " " + events + ">" + children[i].value + "</" + tagType + ">";
             }
-            //html = html.replaceAll("\n", "<br>");
         }
         
         return html;
@@ -280,6 +294,7 @@ class NodeBase{
         let styles = getChildNodesByClassName(parent, "render-style");
         for(let i = 0; i < styles.length; i++){
             let className = styles[i].getAttribute("data-value");
+            css += className + " ";
             style += '.' + className + '{';
             style += styles[i].value;
             style += '} ';
@@ -562,6 +577,39 @@ class NodeBase{
         return dropdown;
     }
 
+    dropdownClassSelector(items){
+        let dropdown = document.createElement("select");
+        dropdown.classList.add("node-dropdown");
+
+        dropdown.onclick = (e) => {
+            dropdown.innerHTML = "";
+            let classes = css.split(' ');
+            for(let i = 0; i < classes.length - 1; i++){
+                let item = document.createElement("option");
+                if(i == 0){
+                    item.selected = true;
+                }
+                item.classList.add("dropdown-item");
+                item.value = classes[i];
+                item.innerHTML = classes[i];
+                dropdown.append(item);
+            }
+        }
+
+        let classes = css.split(' ');
+        for(let i = 0; i < classes.length - 1; i++){
+            let item = document.createElement("option");
+            if(i == 0){
+                item.selected = true;
+            }
+            item.classList.add("dropdown-item");
+            item.value = classes[i];
+            item.innerHTML = classes[i];
+            dropdown.append(item);
+        }
+        return dropdown;
+    }
+
     dropdownTagSelector(items){
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
@@ -617,9 +665,10 @@ class NodeHeader extends NodeBase{
 class NodeDiv extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "div");
-        this.addComponent(this.input(), "render-none");
+        this.addComponent(this.dropdownClassSelector(), "class");
         this.addComponent(this.div(), "render");
         this.addComponent(this.inputScript(), "event");
+        this.addComponent(this.input(), "render-none");
     }
 }
 
@@ -665,6 +714,7 @@ class NodeOutput extends NodeBase{
         let html = "";
         let script = "";
         let style = "";
+        css = "";
         
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
@@ -687,9 +737,7 @@ class NodeOutput extends NodeBase{
         html = html.replaceAll("\n", "<br>");
 
         let code = document.getElementById("code");
-        code.innerHTML = html + "style:<br>" + style;
-
-        
+        code.innerHTML = html + "style:<br>" + style;        
     }
     
 }
