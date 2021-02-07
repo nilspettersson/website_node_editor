@@ -397,7 +397,7 @@ class NodeBase{
         content.id = "content" + this.id;
         content.classList.add("content");
 
-
+        //different node types get different outputs classes.
         let output;
         if(type == "script"){
             output = document.createElement("div");
@@ -424,6 +424,15 @@ class NodeBase{
                     }
                 }
             }
+            output.onmousedown = () => {
+                if(this.parent != null){
+                    let index = this.parent.nodes.indexOf(this);
+                    this.parent.nodes.splice(index, 1);
+                    this.parent = null;
+
+                    nodes.push(this);
+                }
+            }
         }
         else if(type == "style"){
             output = document.createElement("div");
@@ -448,6 +457,16 @@ class NodeBase{
                         nodes.splice(index, 1);
                         NodeBase.connectParent.addChild(this);
                     }
+                }
+            }
+            output.onmousedown = () => {
+                if(this.parent != null){
+                    let index = this.parent.nodes.indexOf(this);
+                    document.getElementsByClassName("node-all-input-types" + this.parent.id)[index].remove();
+                    this.parent.nodes.splice(index, 1);
+                    this.parent = null;
+
+                    nodes.push(this);
                 }
             }
         }
