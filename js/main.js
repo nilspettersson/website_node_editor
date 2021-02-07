@@ -232,12 +232,26 @@ class NodeBase{
 
         //gets the class name  from component.
         let classes = getChildNodesByClassName(parent, "class");
-        let classList = 'class="';
-        for(let i = 0; i < classes.length; i++){
-            let atribute = classes[i].value;
-            classList += atribute + ' ';
+        let hasClass = false;
+        if(classes.length == 1){
+            let atribute = classes[0].value;
+            if(atribute != "none"){
+                hasClass = true;
+            }
         }
-        classList += '"';
+        let classList = "";
+        if(hasClass){
+            classList = 'class="';
+            for(let i = 0; i < classes.length; i++){
+                let atribute = classes[i].value;
+                if(atribute != "none"){
+                    classList += atribute + ' ';
+                }
+                
+            }
+            classList += '"';
+        }
+        
 
         
         //we get all components with class: render.
@@ -588,12 +602,41 @@ class NodeBase{
         let dropdown = document.createElement("select");
         dropdown.classList.add("node-dropdown");
 
+        let item = document.createElement("option");
+        item.classList.add("dropdown-item");
+        item.selected = true;
+        item.value = "none";
+        item.innerHTML = "none";
+        dropdown.append(item);
+
+
         dropdown.onmousedown = (e) => {
+            let selected = -1;
+            let options = dropdown.getElementsByClassName("dropdown-item");
+            for(let i = 0; i < options.length; i++){
+                if(options[i].selected == true){
+                    selected = i;
+                    console.log(selected);
+                    break;
+                }
+            }
+
+
             dropdown.innerHTML = "";
+
+            let item = document.createElement("option");
+            item.classList.add("dropdown-item");
+            if(selected == -1){
+                item.selected = true;
+            }
+            item.value = "none";
+            item.innerHTML = "none";
+            dropdown.append(item);
+
             let classes = css.split(' ');
             for(let i = 0; i < classes.length - 1; i++){
                 let item = document.createElement("option");
-                if(i == 0){
+                if(i == selected - 1){
                     item.selected = true;
                 }
                 item.classList.add("dropdown-item");
