@@ -397,26 +397,12 @@ class NodeBase{
         content.id = "content" + this.id;
         content.classList.add("content");
 
-        //different node types get different outputs classes.
-        let output;
-        if(type == "script"){
-            output = document.createElement("div");
-            output.classList.add("output-script");
+
+        let output = document.createElement("div");
+        if(type == "style-manager" || type == "style" || type == "script"){
+            output.classList.add("output-" + type);
             output.onmouseup = (e) =>{
-                if(NodeBase.connectParent != null && NodeBase.connectType == "input-script"){
-                    if(this.parent == null){
-                        let index = nodes.indexOf(this);
-                        nodes.splice(index, 1);
-                        NodeBase.connectParent.addChild(this);
-                    }
-                }
-            }
-        }
-        else if(type == "style-manager"){
-            output = document.createElement("div");
-            output.classList.add("output-style-manager");
-            output.onmouseup = (e) =>{
-                if(NodeBase.connectParent != null && NodeBase.connectType == "input-style-manager"){
+                if(NodeBase.connectParent != null && NodeBase.connectType == "input-" + type){
                     if(this.parent == null){
                         let index = nodes.indexOf(this);
                         nodes.splice(index, 1);
@@ -427,6 +413,10 @@ class NodeBase{
             output.onmousedown = () => {
                 if(this.parent != null){
                     let index = this.parent.nodes.indexOf(this);
+                    if(type != "style-manager"){
+                        let parentElement = document.getElementById("node" + this.parent.id);
+                        parentElement.getElementsByClassName("node-input-" + type)[0].remove();
+                    }
                     this.parent.nodes.splice(index, 1);
                     this.parent = null;
 
@@ -434,21 +424,7 @@ class NodeBase{
                 }
             }
         }
-        else if(type == "style"){
-            output = document.createElement("div");
-            output.classList.add("output-style");
-            output.onmouseup = (e) =>{
-                if(NodeBase.connectParent != null && NodeBase.connectType == "input-style"){
-                    if(this.parent == null){
-                        let index = nodes.indexOf(this);
-                        nodes.splice(index, 1);
-                        NodeBase.connectParent.addChild(this);
-                    }
-                }
-            }
-        }
         else{
-            output = document.createElement("div");
             output.classList.add("output");
             output.onmouseup = (e) =>{
                 if(NodeBase.connectParent != null && NodeBase.connectType == "input"){
@@ -462,7 +438,8 @@ class NodeBase{
             output.onmousedown = () => {
                 if(this.parent != null){
                     let index = this.parent.nodes.indexOf(this);
-                    document.getElementsByClassName("node-all-input-types" + this.parent.id)[index].remove();
+                    let parentElement = document.getElementById("node" + this.parent.id);
+                    parentElement.getElementsByClassName("node-input")[0].remove();
                     this.parent.nodes.splice(index, 1);
                     this.parent = null;
 
