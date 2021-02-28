@@ -15,7 +15,7 @@ window.addEventListener('load', (event) => {
     nodes.push(new NodeDiv(240, 220 + 40));
     nodes.push(new NodeButton(20, 220 + 80));
     nodes.push(new NodeStyleManager(250, 80 + 80));
-    nodes.push(new NodeStyle(20, 0 + 80));
+    nodes.push(new NodeStyle2(20, 0 + 80));
 
     nodes[0].getHtml();
 
@@ -485,6 +485,14 @@ class NodeBase{
         return text;
     }
 
+    textareaHiden(tagType){
+        let text = document.createElement("textarea");
+        text.classList.add("node-textarea-hiden");
+        text.setAttribute("data-tagType", tagType);
+        text.spellcheck = false;
+        return text;
+    }
+
     inputField(tagType){
         let text = document.createElement("input");
         text.classList.add("node-input-field");
@@ -756,6 +764,15 @@ class NodeStyle extends NodeBase{
         super(x, y, parent, "style");
         this.addComponent(this.inputFieldData(), "render-none");
         this.addComponent(this.textarea("style"), "render-style");
+        this.addComponent(this.inputStyleInherit(), "event");
+    }
+}
+
+class NodeStyle2 extends NodeBase{
+    constructor(x, y, parent){
+        super(x, y, parent, "style");
+        this.addComponent(this.inputFieldData(), "render-none");
+        this.addComponent(this.textareaHiden("style"), "render-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
 }
