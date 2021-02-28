@@ -85,15 +85,16 @@ document.onkeyup = function(e){
 document.onmousemove = function(e){
     //if mouse down on input node create line from input to mouse position.
     if(NodeBase.connectParent != null){
+        let editorOffset = document.getElementById("editor").getBoundingClientRect();
         let node = document.getElementById("node" + NodeBase.connectParent.id);
         let input = node.getElementsByClassName("node-" + NodeBase.connectType)[node.getElementsByClassName("node-" + NodeBase.connectType).length - 1];
 
-        let startX = input.getBoundingClientRect().x;
-        let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2;
+        let startX = input.getBoundingClientRect().x - editorOffset.x;
+        let startY = input.getBoundingClientRect().y + input.getBoundingClientRect().height / 2  - editorOffset.y - 10;
 
         drawLines();
 
-        editorCanvas.drawLine(startX, startY, e.x, e.y);
+        editorCanvas.drawLine(startX, startY, e.x - editorOffset.x, e.y - editorOffset.y - 10);
     }
     //drag selected node.
     else if(NodeBase.mouseDown && NodeBase.currentNode != null){
@@ -355,12 +356,14 @@ class NodeBase{
                 inputIndex++;
             }
 
-            let startX = node.getBoundingClientRect().x;
-            let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2;
+            let editorOffset = document.getElementById("editor").getBoundingClientRect();
+
+            let startX = node.getBoundingClientRect().x - editorOffset.x;
+            let startY = node.getBoundingClientRect().y + node.getBoundingClientRect().height / 2 - editorOffset.y - 10;
 
             let childNode = document.getElementById("node" + this.nodes[i].id);
-            let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width;
-            let endY = childNode.getBoundingClientRect().y + 20;
+            let endX = childNode.getBoundingClientRect().x + childNode.getBoundingClientRect().width  - editorOffset.x;
+            let endY = childNode.getBoundingClientRect().y + 10 - editorOffset.y;
             editorCanvas.drawLine(startX, startY, endX, endY);
             
             this.nodes[i].drawLines();
