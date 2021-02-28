@@ -202,6 +202,7 @@ class NodeBase{
         }
         else if(node.type == "style-manager"){
             node.parent = this;
+            this.addComponent(this.inputStyleManager(), "event");
             this.nodes.push(node);
         }
         else if(node.type == "style"){
@@ -322,24 +323,27 @@ class NodeBase{
 
     //draws lines between parent and child nodes.
     drawLines(){
+        //calculate the amount of nodes of the different types.
         let inputIndex = 0;
         let scriptIndex = 0;
         let styleIndex = 0;
+        let styleManagerIndex = 0;
         for(let i = 0; i < this.nodes.length; i++){
             let node;
-            //if the child node is a script find script input node of parent.
+            //if the child node is a script find the last script input node of parent.
             if(this.nodes[i].type == "script"){
                 node = document.getElementsByClassName("input-script" + this.id)[scriptIndex];
                 scriptIndex++;
             }
             else if(this.nodes[i].type == "style-manager"){
-                node = document.getElementsByClassName("input-style-manager" + this.id)[0];
+                node = document.getElementsByClassName("input-style-manager" + this.id)[styleManagerIndex];
+                styleManagerIndex++;
             }
             else if(this.nodes[i].type == "style"){
                 node = document.getElementsByClassName("input-style" + this.id)[styleIndex];
                 styleIndex++;
             }
-            //if the child node is a html node find input node of parent.
+            //if the child node is a html node find the last input node of parent.
             else{
                 node = document.getElementsByClassName("input" + this.id)[inputIndex];
                 inputIndex++;
@@ -413,10 +417,8 @@ class NodeBase{
             output.onmousedown = () => {
                 if(this.parent != null){
                     let index = this.parent.nodes.indexOf(this);
-                    if(type != "style-manager"){
-                        let parentElement = document.getElementById("node" + this.parent.id);
-                        parentElement.getElementsByClassName("node-input-" + type)[0].remove();
-                    }
+                    let parentElement = document.getElementById("node" + this.parent.id);
+                    parentElement.getElementsByClassName("node-input-" + type)[0].remove();
                     this.parent.nodes.splice(index, 1);
                     this.parent = null;
 
