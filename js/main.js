@@ -851,28 +851,28 @@ function addDropdownClick(e){
 }
 
 function addNewNode(e, type){
-    console.log("add new node");
+    let editorOffset = document.getElementById("editor").getBoundingClientRect();
     let node = null;
     if(type == "div"){
-        node = new NodeDiv(e.x - 90, e.y - 46);
+        node = new NodeDiv(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "text"){
-        node = new NodeText(e.x - 90, e.y - 46);
+        node = new NodeText(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "header"){
-        node = new NodeHeader(e.x - 90, e.y - 46);
+        node = new NodeHeader(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "button"){
-        node = new NodeButton(e.x - 90, e.y - 46);
+        node = new NodeButton(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "script"){
-        node = new NodeScript(e.x - 90, e.y - 46);
+        node = new NodeScript(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "style manager"){
-        node = new NodeStyleManager(e.x - 90, e.y - 46);
+        node = new NodeStyleManager(e.x - 90 - editorOffset.x, e.y - 46);
     }
     else if(type == "style"){
-        node = new NodeStyle(e.x - 90, e.y - 46);
+        node = new NodeStyle(e.x - 90 - editorOffset.x, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;
