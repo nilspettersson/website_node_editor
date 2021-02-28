@@ -97,7 +97,7 @@ document.onmousemove = function(e){
     }
     //drag selected node.
     else if(NodeBase.mouseDown && NodeBase.currentNode != null){
-        let editorOffset = document.getElementById("editor").getBoundingClientRect().y;
+        let editorOffset = document.getElementById("editor").getBoundingClientRect();
 
         let node = document.getElementById("node" + NodeBase.currentNode.id);
         let nodeX = node.getBoundingClientRect().x;
@@ -112,8 +112,8 @@ document.onmousemove = function(e){
             NodeBase.dragSetup = false;
         }
 
-        node.style.left = (x + NodeBase.offsetX) + "px";
-        node.style.top = (y + NodeBase.offsetY - editorOffset) + "px";
+        node.style.left = (x + NodeBase.offsetX - editorOffset.x) + "px";
+        node.style.top = (y + NodeBase.offsetY - editorOffset.y) + "px";
 
         drawLines();
     }
