@@ -18,18 +18,12 @@
     <body>
 
         <div class="menu">
-            <!-- <div class="dropdown">
-                <button class="menu-item" onclick="addDropdownClick(this)">Add</button>
-                <div id="add-content" class="dropdown-content">
-                  <input class="dropdown-item" type="button" value="div" onclick="addNewNode(event, 'div')">
-                  <input class="dropdown-item" type="button" value="text" onclick="addNewNode(event, 'text')">
-                  <input class="dropdown-item" type="button" value="Header" onclick="addNewNode(event, 'header')">
-                  <input class="dropdown-item" type="button" value="button" onclick="addNewNode(event, 'button')">
-                  <input class="dropdown-item" type="button" value="script" onclick="addNewNode(event, 'script')">
-                  <input class="dropdown-item" type="button" value="style manager" onclick="addNewNode(event, 'style manager')">
-                  <input class="dropdown-item" type="button" value="style" onclick="addNewNode(event, 'style')">
+            <div class="dropdown">
+                <button class="menu-item" onclick="addDropdownClick(this, 'file')">File</button>
+                <div id="file-content" class="dropdown-content">
+                    
                 </div>
-            </div> -->
+            </div>
             <input class="menu-item" type="button" value="Vertical" onclick="setVertical()">
             <input class="menu-item" type="button" value="Horizontal" onclick="setHorizontal()">
         </div>
@@ -42,7 +36,7 @@
                 <div class="panel" id="editor">
                     <div class="editor-menu">
                         <div class="dropdown">
-                            <button class="menu-item" onclick="addDropdownClick(this)">Add</button>
+                            <button class="menu-item" onclick="addDropdownClick(this, 'add')">Add</button>
                             <div id="add-content" class="dropdown-content">
                                 <input class="dropdown-item" type="button" value="div" onclick="addNewNode(event, 'div')">
                                 <input class="dropdown-item" type="button" value="text" onclick="addNewNode(event, 'text')">

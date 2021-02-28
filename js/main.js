@@ -846,8 +846,8 @@ function getChildNodes(parent){
     return children;
 }
 
-function addDropdownClick(e){
-    document.getElementById("add-content").classList.toggle("dropdown-content-click");
+function addDropdownClick(e, id){
+    document.getElementById(id + "-content").classList.toggle("dropdown-content-click");
 }
 
 function addNewNode(e, type){
