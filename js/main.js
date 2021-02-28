@@ -11,15 +11,22 @@ window.addEventListener('load', (event) => {
     editorCanvas = new EditorCanvas();
 
     nodes = [];
-    nodes.push(new NodeOutput(450, 120));
-    nodes.push(new NodeDiv(230, 220));
-    nodes.push(new NodeButton(10, 220));
-    nodes.push(new NodeStyleManager(240, 80));
-    nodes.push(new NodeStyle(10, 0));
+    nodes.push(new NodeOutput(460, 120 + 80));
+    nodes.push(new NodeDiv(240, 220 + 40));
+    nodes.push(new NodeButton(20, 220 + 80));
+    nodes.push(new NodeStyleManager(250, 80 + 80));
+    nodes.push(new NodeStyle(20, 0 + 80));
 
     nodes[0].getHtml();
 
     drawLines();
+
+    document.onmousedown = function(e){
+        let menu = document.querySelector('.editor-menu');
+        if (!menu.contains(e.target)) {
+            document.getElementById("add-content").classList.remove("dropdown-content-click");
+        }
+    }
     
 
     document.getElementById("editor").onmousedown = function(e){
@@ -28,7 +35,6 @@ window.addEventListener('load', (event) => {
             NodeBase.lastMouseY = e.y;
             editorDrag = true;
         }
-        document.getElementById("add-content").classList.remove("dropdown-content-click");
     }
 
     document.getElementById("editor").onmouseup = function(e){
@@ -845,6 +851,7 @@ function addDropdownClick(e){
 }
 
 function addNewNode(e, type){
+    console.log("add new node");
     let node = null;
     if(type == "div"){
         node = new NodeDiv(e.x - 90, e.y - 46);
