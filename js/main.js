@@ -488,9 +488,10 @@ class NodeBase{
         return text;
     }
 
-    textareaHiden(tagType){
+    textareaHidden(tagType){
         let text = document.createElement("textarea");
-        text.classList.add("node-textarea-hiden");
+        text.classList.add("node-textarea");
+        text.classList.add("hidden");
         text.setAttribute("data-tagType", tagType);
         text.spellcheck = false;
         return text;
@@ -710,6 +711,27 @@ class NodeBase{
         return text;
     }
 
+    inputFieldDataClass(){
+        let div = document.createElement("div");
+        div.classList.add("node-class-open");
+        
+        let text = document.createElement("input");
+        text.classList.add("node-input-field");
+        text.spellcheck = false;
+        //set the data-value of next component.
+        text.onchange = (e) => {
+            div.nextSibling.setAttribute("data-value", text.value);
+        }
+
+        let button = document.createElement("input");
+        button.type = "button";
+        button.value = "asd";
+
+        div.append(text);
+        div.append(button);
+        return div;
+    }
+
 }
 
 class NodeText extends NodeBase{
@@ -774,8 +796,8 @@ class NodeStyle extends NodeBase{
 class NodeStyle2 extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style");
-        this.addComponent(this.inputFieldData(), "render-none");
-        this.addComponent(this.textareaHiden("style"), "render-style");
+        this.addComponent(this.inputFieldDataClass(), "render-none");
+        this.addComponent(this.textareaHidden("style"), "render-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
 }
