@@ -725,7 +725,7 @@ class NodeBase{
 
         let button = document.createElement("input");
         button.type = "button";
-        button.value = "asd";
+        button.value = "open";
 
         div.append(text);
         div.append(button);

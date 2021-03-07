@@ -288,14 +288,23 @@ iframe {
     border-radius: 0.14rem;
     padding: 0.2rem 0.3rem;
     margin:0.5rem auto;
-    width: 60%;
+    width: 50%;
     outline: none;
 }
 
-.btn {
-    /*create btn class*/
+.node input[type=button] {
+    background: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.24rem 0.6rem;
+    margin-left: 0.6rem;
+    border-radius: 0.2rem;
 }
 
+.node input[type=button]:hover, .node input[type=button]:focus {
+    background: rgb(209, 209, 209);
+}
 
 .node-input-field{
     display: block;
