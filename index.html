@@ -24,8 +24,8 @@
                     
                 </div>
             </div>
-            <input class="menu-item" type="button" value="Vertical" onclick="setVertical()">
-            <input class="menu-item" type="button" value="Horizontal" onclick="setHorizontal()">
+            <input class="menu-item" type="button" value="Layout" onclick="openEditor('editor')">
+            <input class="menu-item" type="button" value="Style editor" onclick="">
         </div>
         
         <div id="container" class="panel panel-horizontal">
@@ -50,6 +50,11 @@
                     </div>
                     <canvas id="canvas" width="2920" height=2080></canvas>
                 </div>
+
+                <div class="panel hidden-editor" id="style-editor">
+                    style editor
+                </div>
+
                 <div class="panel" data-panel-width="20">
                     <iframe id='viewer'></iframe>
                 </div>
