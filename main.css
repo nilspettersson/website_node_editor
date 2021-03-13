@@ -408,3 +408,14 @@ iframe {
     border: calc(1em / 16) solid #000000af;
     border-radius: 100%;
 }
+
+/*style editor*/
+
+#style-editor {
+    color: white;
+    background: #1f1f1f;
+}
+
+.hidden-editor {
+    display: none;
+}
