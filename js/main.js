@@ -733,6 +733,11 @@ class NodeBase{
         let button = document.createElement("input");
         button.type = "button";
         button.value = "open";
+        button.onclick = () => {
+            document.getElementById("editor").classList.add("hidden-editor");
+            document.getElementById("style-editor").classList.remove("hidden-editor");
+            initPanels();
+        }
 
         div.append(text);
         div.append(button);
