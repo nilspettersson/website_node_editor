@@ -76,6 +76,13 @@ window.addEventListener('load', (event) => {
     }
 });
 
+//opens an editor panel using its id.
+function openEditor(editor) {
+    document.getElementById("editor").classList.add("hidden-editor");
+    document.getElementById("style-editor").classList.add("hidden-editor");
+    document.getElementById(editor).classList.remove("hidden-editor");
+    initPanels(); //from resizable panels library, function names may change.
+}
 
 
 document.onkeyup = function(e){
