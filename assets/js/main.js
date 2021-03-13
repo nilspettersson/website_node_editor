@@ -3,7 +3,6 @@ let nodeCount = 0;
 let editorDrag = false;
 
 let css = "";
-
 let nodes;
 let editorCanvas;
 
