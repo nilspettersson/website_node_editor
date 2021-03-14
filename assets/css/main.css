@@ -281,25 +281,14 @@ iframe {
     display: none;
 }
 
-.node-class-open .node-input-field{
-    display: inline-block;
-    resize: none;
-    border: 0.064rem solid rgba(0, 0, 0, 0);
-    border-radius: 0.14rem;
-    padding: 0.2rem 0.3rem;
-    margin:0.5rem auto;
-    width: 50%;
-    outline: none;
-}
-
 .node input[type=button] {
     background: white;
     border: none;
     outline: none;
     cursor: pointer;
     padding: 0.24rem 0.6rem;
-    margin-left: 0.6rem;
     border-radius: 0.2rem;
+    width: 90%;
 }
 
 .node input[type=button]:hover, .node input[type=button]:focus {
@@ -414,16 +403,6 @@ iframe {
     color: white;
     background: #1f1f1f;
 }
-
-/*#style-editor-text {
-    width: 100%;
-    height: 100%;
-    border: none;
-    outline: none;
-    resize: none;
-    color: white;
-    background: #1f1f1f;
-}*/
 
 .hidden-editor {
     display: none;
