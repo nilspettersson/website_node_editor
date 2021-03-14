@@ -11,10 +11,9 @@ window.addEventListener('load', (event) => {
 
     nodes = [];
     nodes.push(new NodeOutput(460, 120 + 80));
-    nodes.push(new NodeDiv(240, 220 + 40));
     nodes.push(new NodeButton(20, 220 + 80));
     nodes.push(new NodeStyleManager(250, 80 + 80));
-    nodes.push(new NodeStyle2(20, 0 + 80));
+    nodes.push(new NodeStyle(20, 0 + 80));
 
     nodes[0].getHtml();
 
@@ -740,7 +739,7 @@ class NodeBase{
         button.type = "button";
         button.value = "open";
         button.onclick = () => {
-            console.log(this);
+            document.querySelector("#style-editor textarea").value = document.getElementById("node" + this.id).querySelector("textarea").value;
             NodeBase.currentNode = this;
 
             document.getElementById("editor").classList.add("hidden-editor");
@@ -808,17 +807,17 @@ class NodeStyleManager extends NodeBase{
 class NodeStyle extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style");
-        this.addComponent(this.inputFieldData(), "render-none");
-        this.addComponent(this.textarea("style"), "render-style");
+        this.addComponent(this.inputFieldDataClass(), "render-none");
+        this.addComponent(this.textareaHidden("style"), "render-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
 }
 
-class NodeStyle2 extends NodeBase{
+class NodeSimpleStyle extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style");
-        this.addComponent(this.inputFieldDataClass(), "render-none");
-        this.addComponent(this.textareaHidden("style"), "render-style");
+        this.addComponent(this.inputFieldData(), "render-none");
+        this.addComponent(this.textarea("style"), "render-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
 }
@@ -936,6 +935,9 @@ function addNewNode(e, type){
     }
     else if(type == "style"){
         node = new NodeStyle(e.x - 90 - editorOffset.x, e.y - 46);
+    }
+    else if(type == "simple style"){
+        node = new NodeSimpleStyle(e.x - 90 - editorOffset.x, e.y - 46);
     }
     NodeBase.lastMouseX = 0;
     NodeBase.lastMouseY = 0;
