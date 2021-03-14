@@ -758,7 +758,7 @@ class NodeBase{
         button.type = "button";
         button.value = "open";
         button.onclick = () => {
-            document.querySelector("#style-editor textarea").value = document.getElementById("node" + this.id).querySelector("textarea").value;
+            window.monacoEditor.setValue(document.getElementById("node" + this.id).querySelector("textarea").value);
             NodeBase.currentNode = this;
 
             document.getElementById("editor").classList.add("hidden-editor");
@@ -836,7 +836,7 @@ class NodeSimpleStyle extends NodeBase{
     constructor(x, y, parent){
         super(x, y, parent, "style");
         this.addComponent(this.inputFieldData(), "render-none");
-        this.addComponent(this.textarea("style"), "render-style");
+        this.addComponent(this.textarea("style"), "render-simple-style");
         this.addComponent(this.inputStyleInherit(), "event");
     }
 }
