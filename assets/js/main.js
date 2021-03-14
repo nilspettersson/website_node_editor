@@ -74,9 +74,10 @@ window.addEventListener('load', (event) => {
     }
 
     //takes text from textarea in style editor and adds it to the styler node.
-    document.querySelector("#style-editor textarea").onkeyup = function() {
+    document.querySelector("#style-editor #style-editor-text").onkeyup = function() {
+        console.log(window.monacoEditor.getValue());
         let node = document.getElementById("node" + NodeBase.currentNode.id).querySelector("textarea");
-        node.value = this.value;
+        node.value = window.monacoEditor.getValue();
     }
 
 });
