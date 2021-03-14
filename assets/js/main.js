@@ -73,6 +73,13 @@ window.addEventListener('load', (event) => {
         drawLines();
         nodes[0].getHtml();
     }
+
+    //takes text from textarea in style editor and adds it to the styler node.
+    document.querySelector("#style-editor textarea").onkeyup = function() {
+        let node = document.getElementById("node" + NodeBase.currentNode.id).querySelector("textarea");
+        node.value = this.value;
+    }
+
 });
 
 //opens an editor panel using its id.
@@ -733,6 +740,9 @@ class NodeBase{
         button.type = "button";
         button.value = "open";
         button.onclick = () => {
+            console.log(this);
+            NodeBase.currentNode = this;
+
             document.getElementById("editor").classList.add("hidden-editor");
             document.getElementById("style-editor").classList.remove("hidden-editor");
             initPanels();
