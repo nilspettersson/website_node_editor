@@ -2,6 +2,7 @@
 let nodeCount = 0;
 let editorDrag = false;
 
+let style = "";
 let css = "";
 let nodes;
 let editorCanvas;
@@ -158,6 +159,20 @@ document.onmousemove = function(e){
         drawLines();
     }
 
+}
+
+function getStyleClasses() {
+    let classes = Array();
+    let start = 0;
+    for(let i = 0; i < style.length; i++) {
+        if(style[i] == ".") {
+            start = i + 1;
+        }
+        else if(style[i] == "{") {
+            classes.push(style.substring(start, i));
+        }
+    }
+    return classes;
 }
 
 function drawLines(){
@@ -833,15 +848,13 @@ class NodeOutput extends NodeBase{
     getHtml(){
         let html = "";
         let script = "";
-        let style = "";
+        style = "";
         css = "";
-        
         for(let i = 0; i < this.nodes.length; i++){
             html += this.nodes[i].getHtml();
             script += this.nodes[i].getScript();
             style += this.nodes[i].getStyle();
         }
-
 
         let website = '<!DOCTYPE html> \n' +
         '<html lang="en"> \n'+
