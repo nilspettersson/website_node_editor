@@ -1,0 +1,27 @@
+{
+  "name": "website_editor",
+  "version": "1.0.0",
+  "description": "Node editor for creating html code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nilspettersson/website_node_editor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nilspettersson/website_node_editor/issues"
+  },
+  "homepage": "https://nilspettersson.github.io/website_node_editor",
+  "dependencies": {
+    "monaco-editor": "^0.23.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
+  }
+}

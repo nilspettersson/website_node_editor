@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/css/main.css">
+
+        <script src="https://nilspettersson.github.io/js_libraries/resizeable_panels/js/resizeable_panels.js"></script>
+        <script src="assets/js/main.js"></script>
+
+    </head>
+    <body>
+        <div class="menu">
+            <div class="dropdown">
+                <button class="menu-item" onclick="addDropdownClick(this, 'file')">File</button>
+                <div id="file-content" class="dropdown-content">
+                    
+                </div>
+            </div>
+            <input class="menu-item" type="button" value="Layout" onclick="openEditor('editor')">
+            <input class="menu-item" type="button" value="Style editor" onclick="">
+        </div>
+        
+        <div id="container" class="panel panel-horizontal">
+            <div class="panel left" data-panel-width="10" data-panel-min-width="2" data-panel-max-width="25">
+                
+            </div>
+            <div id="view" class="panel panel-vertical">
+                <div class="panel" id="editor">
+                    <div class="editor-menu">
+                        <div class="dropdown">
+                            <button class="menu-item" onclick="addDropdownClick(this, 'add')">Add</button>
+                            <div id="add-content" class="dropdown-content">
+                                <input class="dropdown-item" type="button" value="div" onclick="addNewNode(event, 'div')">
+                                <input class="dropdown-item" type="button" value="text" onclick="addNewNode(event, 'text')">
+                                <input class="dropdown-item" type="button" value="Header" onclick="addNewNode(event, 'header')">
+                                <input class="dropdown-item" type="button" value="button" onclick="addNewNode(event, 'button')">
+                                <input class="dropdown-item" type="button" value="script" onclick="addNewNode(event, 'script')">
+                                <input class="dropdown-item" type="button" value="style manager" onclick="addNewNode(event, 'style manager')">
+                                <input class="dropdown-item" type="button" value="style" onclick="addNewNode(event, 'style')">
+                                <input class="dropdown-item" type="button" value="simple style" onclick="addNewNode(event, 'simple style')">
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="canvas" width="2920" height=2080></canvas>
+                </div>
+
+                <div class="panel hidden-editor" id="style-editor">
+                    <div id="style-editor-text" style="width: 100%; height: 100%;"></div>
+
+                    <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+                    <script>
+                        require.config({ paths: { vs: '../node_modules/monaco-editor/min/vs' } });
+
+                        require(['vs/editor/editor.main'], function () {
+                            window.monacoEditor = monaco.editor.create(document.getElementById('style-editor-text'), {
+                                language: 'css',
+                                automaticLayout: true,
+                                theme: "vs-dark"
+                            });
+                            console.log(monacoEditor.getValue());
+                        });
+                    </script>
+                    <!-- <textarea></textarea> -->
+                </div>
+
+                <div class="panel" data-panel-width="20" data-panel-min-width="5">
+                    <iframe id='viewer'></iframe>
+                </div>
+            </div>
+            
+            <div class="panel code-viewer" data-panel-width="16" data-panel-min-width="5" data-panel-max-width="30">
+                <p id="code"></p>
+            </div>
+        </div>
+
+    </body>
+</html>
