@@ -56,7 +56,6 @@ window.addEventListener('load', (event) => {
                     NodeBase.currentNode.nodes[i].parent = null;
                     nodes.push(NodeBase.currentNode.nodes[i]);
                 }
-                console.log(index);
                 let parentId = NodeBase.currentNode.parent.id;
                 let last = NodeBase.currentNode.parent.nodes.length - 1;
                 document.getElementsByClassName("node-all-input-types" + parentId)[last].remove();
@@ -76,7 +75,6 @@ window.addEventListener('load', (event) => {
 
     //takes text from textarea in style editor and adds it to the styler node.
     document.querySelector("#style-editor #style-editor-text").onkeyup = function() {
-        console.log(window.monacoEditor.getValue());
         let node = document.getElementById("node" + NodeBase.currentNode.id).querySelector("textarea");
         node.value = window.monacoEditor.getValue();
     }
@@ -343,14 +341,20 @@ class NodeBase{
             }
         }
 
-        //add script. adds the script content from the child script nodes and puts it in function
-        let styles = getChildNodesByClassName(parent, "render-style");
-        for(let i = 0; i < styles.length; i++){
-            let className = styles[i].getAttribute("data-value");
+        //add simple style. adds the simple style content from the child simple style nodes and puts it in function
+        let simpleStyles = getChildNodesByClassName(parent, "render-simple-style");
+        for(let i = 0; i < simpleStyles.length; i++){
+            let className = simpleStyles[i].getAttribute("data-value");
             css += className + " ";
             style += '.' + className + '{';
-            style += styles[i].value;
+            style += simpleStyles[i].value;
             style += '} ';
+        }
+
+
+        let styles = getChildNodesByClassName(parent, "render-style");
+        for(let i = 0; i < styles.length; i++){
+            style += styles[i].value;
         }
 
         return style;
@@ -657,10 +661,9 @@ class NodeBase{
         dropdown.onmousedown = (e) => {
             let selected = -1;
             let options = dropdown.getElementsByClassName("dropdown-item");
-            for(let i = 0; i < options.length; i++){
-                if(options[i].selected == true){
+            for(let i = 0; i < options.length; i++) {
+                if(options[i].selected == true) {
                     selected = i;
-                    console.log(selected);
                     break;
                 }
             }
@@ -677,10 +680,10 @@ class NodeBase{
             item.innerHTML = "none";
             dropdown.append(item);
 
-            let classes = css.split(' ');
-            for(let i = 0; i < classes.length - 1; i++){
+            let classes = getStyleClasses();
+            for(let i = 0; i < classes.length; i++) {
                 let item = document.createElement("option");
-                if(i == selected - 1){
+                if(i == selected - 1) {
                     item.selected = true;
                 }
                 item.classList.add("dropdown-item");
