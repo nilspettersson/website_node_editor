@@ -32,7 +32,7 @@
                 
             </div>
             <div id="view" class="panel panel-vertical">
-                <div class="panel" id="editor">
+                <div class="panel hidden-editor" id="editor">
                     <div class="editor-menu">
                         <div class="dropdown">
                             <button class="menu-item" onclick="addDropdownClick(this, 'add')">Add</button>
@@ -51,8 +51,23 @@
                     <canvas id="canvas" width="2920" height=2080></canvas>
                 </div>
 
-                <div class="panel hidden-editor" id="style-editor">
-                    <textarea></textarea>
+                <div class="panel " id="style-editor">
+                    <!-- <div id="container" style="width: 800px; height: 600px; border: 1px solid grey"></div> -->
+                    <div id="style-editor-text" style="width: 350px; height: 500px; border: 1px solid grey"></div>
+
+                    <!-- OR ANY OTHER AMD LOADER HERE INSTEAD OF loader.js -->
+                    <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+                    <script>
+                        require.config({ paths: { vs: '../node_modules/monaco-editor/min/vs' } });
+
+                        require(['vs/editor/editor.main'], function () {
+                            var editor = monaco.editor.create(document.getElementById('style-editor-text'), {
+                                value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+                                language: 'css'
+                            });
+                        });
+                    </script>
+                    <!-- <textarea></textarea> -->
                 </div>
 
                 <div class="panel" data-panel-width="20" data-panel-min-width="5">
